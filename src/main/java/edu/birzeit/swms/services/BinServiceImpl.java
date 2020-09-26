@@ -6,12 +6,14 @@ import edu.birzeit.swms.exceptions.ResourceNotFoundException;
 import edu.birzeit.swms.mappers.BinMapper;
 import edu.birzeit.swms.models.Bin;
 import edu.birzeit.swms.repositories.BinRepository;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Log
 @Service
 public class BinServiceImpl implements BinService {
 
@@ -66,6 +68,7 @@ public class BinServiceImpl implements BinService {
 
     @Override
     public BinDto updateBinStatus(Status status, int id) {
+        log.info("updateBinStatus");
         Bin bin = binRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Bin", "id", id));
         bin.setStatus(status);
         Bin savedBin = binRepository.save(bin);
