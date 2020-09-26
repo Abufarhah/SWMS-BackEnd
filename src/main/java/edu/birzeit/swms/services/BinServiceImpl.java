@@ -1,6 +1,7 @@
 package edu.birzeit.swms.services;
 
 import edu.birzeit.swms.dtos.BinDto;
+import edu.birzeit.swms.enums.Status;
 import edu.birzeit.swms.exceptions.ResourceNotFoundException;
 import edu.birzeit.swms.mappers.BinMapper;
 import edu.birzeit.swms.models.Bin;
@@ -44,11 +45,14 @@ public class BinServiceImpl implements BinService {
 
     @Override
     public BinDto updateBin(BinDto binDto, int id) {
-        Bin bin = binRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Bin", "id", id));
-        bin = binMapper.dtoToBin(binDto);
-        Bin savedBin = binRepository.save(bin);
-        BinDto savedBinDto = binMapper.binToDto(savedBin);
-        return savedBinDto;
+        if (binRepository.existsById(id)) {
+            Bin bin = binMapper.dtoToBin(binDto);
+            Bin savedBin = binRepository.save(bin);
+            BinDto savedBinDto = binMapper.binToDto(savedBin);
+            return savedBinDto;
+        }else{
+            throw new ResourceNotFoundException("Bin", "id", id);
+        }
     }
 
     @Override
@@ -58,6 +62,15 @@ public class BinServiceImpl implements BinService {
         } else {
             throw new ResourceNotFoundException("Bin", "id", id);
         }
+    }
+
+    @Override
+    public BinDto updateBinStatus(Status status, int id) {
+        Bin bin = binRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Bin", "id", id));
+        bin.setStatus(status);
+        Bin savedBin = binRepository.save(bin);
+        BinDto savedBinDto = binMapper.binToDto(savedBin);
+        return savedBinDto;
     }
 
 }
