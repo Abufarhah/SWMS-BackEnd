@@ -13,7 +13,6 @@ import javax.persistence.Enumerated;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
 public class BinDto {
 
     private int id;
