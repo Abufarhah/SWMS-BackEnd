@@ -17,13 +17,4 @@ class SWMSApplicationTests {
     void contextLoads() {
     }
 
-    @Test
-    void createBin(){
-        Bin bin=new Bin();
-        bin.setLatitude(10);
-        bin.setLongitude(100);
-        bin.setStatus(Status.UNDER_THRESHOLD);
-        binRepository.save(bin);
-    }
-
 }
