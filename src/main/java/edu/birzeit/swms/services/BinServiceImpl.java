@@ -52,7 +52,7 @@ public class BinServiceImpl implements BinService {
             Bin savedBin = binRepository.save(bin);
             BinDto savedBinDto = binMapper.binToDto(savedBin);
             return savedBinDto;
-        }else{
+        } else {
             throw new ResourceNotFoundException("Bin", "id", id);
         }
     }

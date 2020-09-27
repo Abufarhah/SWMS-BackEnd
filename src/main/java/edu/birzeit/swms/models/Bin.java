@@ -28,6 +28,11 @@ public class Bin {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    @ToString.Exclude
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinColumn(name = "area_id")
+    private Area area;
+
     @CreatedBy
     @Column(nullable = false, updatable = false)
     private String createdBy;
