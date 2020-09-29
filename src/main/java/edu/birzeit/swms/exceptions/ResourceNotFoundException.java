@@ -1,6 +1,7 @@
 package edu.birzeit.swms.exceptions;
 
 public class ResourceNotFoundException extends RuntimeException {
+
     private static final long serialVersionUID = 1L;
     private String resourceName;
     private String fieldName;
@@ -45,4 +46,5 @@ public class ResourceNotFoundException extends RuntimeException {
     public String toString() {
         return super.getMessage();
     }
+
 }
