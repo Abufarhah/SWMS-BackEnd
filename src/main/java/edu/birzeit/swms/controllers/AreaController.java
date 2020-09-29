@@ -1,6 +1,7 @@
 package edu.birzeit.swms.controllers;
 
 import edu.birzeit.swms.dtos.AreaDto;
+import edu.birzeit.swms.dtos.BinDto;
 import edu.birzeit.swms.exceptions.ResourceAssignedException;
 import edu.birzeit.swms.exceptions.ResourceNotAssignedException;
 import edu.birzeit.swms.exceptions.ResourceNotFoundException;
@@ -11,6 +12,7 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Log
@@ -46,6 +48,11 @@ public class AreaController {
         areaService.deleteArea(id);
     }
 
+    @GetMapping("/{id}")
+    public List<BinDto> getBinsOfArea(@PathVariable int id) {
+        return areaService.getBinsOfArea(id);
+    }
+
     @GetMapping("{areaId}/assignBin/{binId}")
     public void assignBin(@PathVariable int areaId, @PathVariable int binId) {
         areaService.assignBin(areaId, binId);
@@ -53,7 +60,7 @@ public class AreaController {
     }
 
     @GetMapping("{areaId}/unassignBin/{binId}")
-    public void unAssignBin(int areaId, int binId) {
+    public void unAssignBin(@PathVariable int areaId, @PathVariable int binId) {
         areaService.unAssignBin(areaId, binId);
     }
 

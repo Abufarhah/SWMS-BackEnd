@@ -6,6 +6,7 @@ import edu.birzeit.swms.exceptions.ResourceAssignedException;
 import edu.birzeit.swms.exceptions.ResourceNotAssignedException;
 import edu.birzeit.swms.exceptions.ResourceNotFoundException;
 import edu.birzeit.swms.mappers.AreaMapper;
+import edu.birzeit.swms.mappers.BinMapper;
 import edu.birzeit.swms.models.Area;
 import edu.birzeit.swms.models.Bin;
 import edu.birzeit.swms.repositories.AreaRepository;
@@ -13,6 +14,7 @@ import edu.birzeit.swms.repositories.BinRepository;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +31,9 @@ public class AreaServiceImpl implements AreaService {
 
     @Autowired
     AreaMapper areaMapper;
+
+    @Autowired
+    BinMapper binMapper;
 
     @Override
     public List<AreaDto> getAreas() {
@@ -71,6 +76,14 @@ public class AreaServiceImpl implements AreaService {
         } else {
             throw new ResourceNotFoundException("Area", "id", id);
         }
+    }
+
+    @Override
+    public List<BinDto> getBinsOfArea(int id) {
+        Area area = areaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Area", "id", id));
+        List<BinDto> binDtoList = new ArrayList<>();
+        area.getBinList().forEach(bin -> binDtoList.add(binMapper.binToDto(bin)));
+        return binDtoList;
     }
 
     @Override
