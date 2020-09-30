@@ -48,7 +48,7 @@ public class AreaController {
         areaService.deleteArea(id);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}/bins")
     public List<BinDto> getBinsOfArea(@PathVariable int id) {
         return areaService.getBinsOfArea(id);
     }
