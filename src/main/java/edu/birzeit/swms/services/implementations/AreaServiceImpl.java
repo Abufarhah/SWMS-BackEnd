@@ -1,4 +1,4 @@
-package edu.birzeit.swms.services;
+package edu.birzeit.swms.services.implementations;
 
 import edu.birzeit.swms.dtos.AreaDto;
 import edu.birzeit.swms.dtos.BinDto;
@@ -11,6 +11,7 @@ import edu.birzeit.swms.models.Area;
 import edu.birzeit.swms.models.Bin;
 import edu.birzeit.swms.repositories.AreaRepository;
 import edu.birzeit.swms.repositories.BinRepository;
+import edu.birzeit.swms.services.AreaService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -102,8 +103,8 @@ public class AreaServiceImpl implements AreaService {
         Area area = areaRepository.findById(areaId).orElseThrow(() -> new ResourceNotFoundException("Area", "id", areaId));
         Bin bin = binRepository.findById(binId).orElseThrow((() -> new ResourceNotFoundException("Bin", "id", binId)));
         if (area.getBinList().contains(bin)) {
-            area.getBinList().remove(bin);
-            areaRepository.save(area);
+            bin.setArea(null);
+            binRepository.save(bin);
         } else {
             throw new ResourceNotAssignedException("Area", areaId, "Bin", binId);
         }

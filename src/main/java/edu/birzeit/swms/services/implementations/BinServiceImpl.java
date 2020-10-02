@@ -1,4 +1,4 @@
-package edu.birzeit.swms.services;
+package edu.birzeit.swms.services.implementations;
 
 import edu.birzeit.swms.dtos.BinDto;
 import edu.birzeit.swms.enums.Status;
@@ -6,6 +6,7 @@ import edu.birzeit.swms.exceptions.ResourceNotFoundException;
 import edu.birzeit.swms.mappers.BinMapper;
 import edu.birzeit.swms.models.Bin;
 import edu.birzeit.swms.repositories.BinRepository;
+import edu.birzeit.swms.services.BinService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
