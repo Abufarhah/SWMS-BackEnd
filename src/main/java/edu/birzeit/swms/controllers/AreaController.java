@@ -56,7 +56,6 @@ public class AreaController {
     @GetMapping("{areaId}/assignBin/{binId}")
     public void assignBin(@PathVariable int areaId, @PathVariable int binId) {
         areaService.assignBin(areaId, binId);
-
     }
 
     @GetMapping("{areaId}/unassignBin/{binId}")

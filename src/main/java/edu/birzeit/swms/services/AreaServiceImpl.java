@@ -14,7 +14,6 @@ import edu.birzeit.swms.repositories.BinRepository;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,8 +92,8 @@ public class AreaServiceImpl implements AreaService {
         if (area.getBinList().contains(bin)) {
             throw new ResourceAssignedException("Area", areaId, "Bin", binId);
         } else {
-            area.getBinList().add(bin);
-            areaRepository.save(area);
+            bin.setArea(area);
+            binRepository.save(bin);
         }
     }
 
