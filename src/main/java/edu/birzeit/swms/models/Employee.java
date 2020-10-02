@@ -17,8 +17,6 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 public class Employee extends User{
 
-    private String address;
-
     @ManyToMany(mappedBy = "employeeList")
     private List<Area> areaList;
 }
