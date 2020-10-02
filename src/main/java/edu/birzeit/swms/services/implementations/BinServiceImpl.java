@@ -48,15 +48,12 @@ public class BinServiceImpl implements BinService {
 
     @Override
     public BinDto updateBin(BinDto binDto, int id) {
-        if (binRepository.existsById(id)) {
-            Bin bin = binMapper.dtoToBin(binDto);
-            bin.setId(id);
-            Bin savedBin = binRepository.save(bin);
-            BinDto savedBinDto = binMapper.binToDto(savedBin);
-            return savedBinDto;
-        } else {
-            throw new ResourceNotFoundException("Bin", "id", id);
-        }
+        Bin bin = binRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Bin", "id", id));
+        bin.setLatitude(binDto.getLatitude());
+        bin.setLongitude(binDto.getLongitude());
+        Bin savedBin = binRepository.save(bin);
+        BinDto savedBinDto = binMapper.binToDto(savedBin);
+        return savedBinDto;
     }
 
     @Override

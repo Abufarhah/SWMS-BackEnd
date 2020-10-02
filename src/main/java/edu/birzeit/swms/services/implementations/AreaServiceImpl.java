@@ -59,15 +59,11 @@ public class AreaServiceImpl implements AreaService {
 
     @Override
     public AreaDto updateArea(AreaDto areaDto, int id) {
-        if (areaRepository.existsById(id)) {
-            Area area = areaMapper.dtoToArea(areaDto);
-            area.setId(id);
-            Area savedArea = areaRepository.save(area);
-            AreaDto savedAreaDto = areaMapper.areaToDto(savedArea);
-            return savedAreaDto;
-        } else {
-            throw new ResourceNotFoundException("Area", "id", id);
-        }
+        Area area = areaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Area", "id", id));
+        area.setName(areaDto.getName());
+        Area savedArea = areaRepository.save(area);
+        AreaDto savedAreaDto = areaMapper.areaToDto(savedArea);
+        return savedAreaDto;
     }
 
     @Override

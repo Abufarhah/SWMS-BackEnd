@@ -18,8 +18,11 @@ public class Area {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    private String name;
 
     @OneToMany(mappedBy = "area")
     private List<Bin> binList;
+
+
 
 }

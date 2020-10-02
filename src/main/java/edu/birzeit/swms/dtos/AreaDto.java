@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 public class AreaDto {
 
     private int id;
+    private String name;
 
 }
