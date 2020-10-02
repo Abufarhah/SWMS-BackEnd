@@ -1,8 +1,12 @@
 package edu.birzeit.swms.dtos;
 
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.Example;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.Pattern;
 
 @Data
 @AllArgsConstructor
@@ -12,7 +16,9 @@ public class EmployeeDto {
     private int id;
     private String firstName;
     private String lastName;
-    private int phone;
+    @ApiModelProperty(example = "0599123456")
+    @Pattern(regexp="(^$|^05[0-9]{8})")
+    private String phone;
     private String address;
     private String username;
 

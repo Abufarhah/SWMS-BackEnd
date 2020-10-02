@@ -2,8 +2,10 @@ package edu.birzeit.swms.controllers;
 
 import edu.birzeit.swms.dtos.EmployeeDto;
 import edu.birzeit.swms.services.EmployeeService;
+import io.swagger.annotations.Api;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,6 +13,7 @@ import java.util.List;
 @Log
 @RestController
 @RequestMapping("/employees")
+@Api(tags = "Operations related to employees in SWMS")
 public class EmployeeController {
 
     @Autowired
@@ -27,12 +30,12 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public EmployeeDto addEmployee(@RequestBody EmployeeDto employeeDto) {
+    public EmployeeDto addEmployee(@Validated @RequestBody EmployeeDto employeeDto) {
         return employeeService.addEmployee(employeeDto);
     }
 
     @PutMapping("/{id}")
-    public EmployeeDto updateEmployee(@RequestBody EmployeeDto employeeDto, @PathVariable int id) {
+    public EmployeeDto updateEmployee(@Validated @RequestBody EmployeeDto employeeDto, @PathVariable int id) {
         return employeeService.updateEmployee(employeeDto, id);
     }
 

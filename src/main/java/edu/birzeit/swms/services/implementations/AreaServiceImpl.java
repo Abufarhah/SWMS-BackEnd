@@ -9,8 +9,10 @@ import edu.birzeit.swms.mappers.AreaMapper;
 import edu.birzeit.swms.mappers.BinMapper;
 import edu.birzeit.swms.models.Area;
 import edu.birzeit.swms.models.Bin;
+import edu.birzeit.swms.models.Employee;
 import edu.birzeit.swms.repositories.AreaRepository;
 import edu.birzeit.swms.repositories.BinRepository;
+import edu.birzeit.swms.repositories.EmployeeRepository;
 import edu.birzeit.swms.services.AreaService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,9 @@ public class AreaServiceImpl implements AreaService {
 
     @Autowired
     BinRepository binRepository;
+
+    @Autowired
+    EmployeeRepository employeeRepository;
 
     @Autowired
     AreaMapper areaMapper;
@@ -104,6 +109,30 @@ public class AreaServiceImpl implements AreaService {
             binRepository.save(bin);
         } else {
             throw new ResourceNotAssignedException("Area", areaId, "Bin", binId);
+        }
+    }
+
+    @Override
+    public void assignEmployee(int areaId, int employeeId) {
+        Area area = areaRepository.findById(areaId).orElseThrow(() -> new ResourceNotFoundException("Area", "id", areaId));
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow((() -> new ResourceNotFoundException("Employee", "id", employeeId)));
+        if (area.getEmployeeList().contains(employee)) {
+            throw new ResourceAssignedException("Area", areaId, "Employee", employeeId);
+        } else {
+            employee.getAreaList().add(area);
+            employeeRepository.save(employee);
+        }
+    }
+
+    @Override
+    public void unAssignEmployee(int areaId, int employeeId) {
+        Area area = areaRepository.findById(areaId).orElseThrow(() -> new ResourceNotFoundException("Area", "id", areaId));
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow((() -> new ResourceNotFoundException("Employee", "id", employeeId)));
+        if (area.getEmployeeList().contains(employee)) {
+            area.getEmployeeList().remove(employee);
+            areaRepository.save(area);
+        } else {
+            throw new ResourceNotAssignedException("Area", areaId, "Employee", employeeId);
         }
     }
 

@@ -4,6 +4,7 @@ import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 
 @Entity
 @Setter
@@ -19,7 +20,7 @@ public class User {
     private int id;
     private String firstName;
     private String lastName;
-    private int phone;
+    private String phone;
     private String address;
     private String username;
     private String password;

@@ -23,9 +23,11 @@ public class SwaggerConfig {
     public Docket swaggerConfiguration() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .paths(or(PathSelectors.regex("/bins.*"),
-                        PathSelectors.regex("/areas.*"),
-                        PathSelectors.regex("/employees.*")))
+                .paths(or(PathSelectors.regex("/areas.*"),
+                        PathSelectors.regex("/bins.*"),
+                        PathSelectors.regex("/citizens.*"),
+                        PathSelectors.regex("/employees.*"),
+                        PathSelectors.regex("/vehicles.*")))
                 .apis(RequestHandlerSelectors.basePackage("edu.birzeit"))
                 .build()
                 .apiInfo(apiInfo());

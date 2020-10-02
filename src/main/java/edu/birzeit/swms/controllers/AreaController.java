@@ -8,6 +8,7 @@ import edu.birzeit.swms.exceptions.ResourceNotFoundException;
 import edu.birzeit.swms.models.Area;
 import edu.birzeit.swms.models.Bin;
 import edu.birzeit.swms.services.AreaService;
+import io.swagger.annotations.Api;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ import java.util.List;
 @Log
 @RestController
 @RequestMapping("/areas")
+@Api(tags = "Operations related to areas in SWMS")
 public class AreaController {
 
     @Autowired
@@ -53,14 +55,24 @@ public class AreaController {
         return areaService.getBinsOfArea(id);
     }
 
-    @GetMapping("{areaId}/assignBin/{binId}")
+    @GetMapping("{areaId}/assign-bin/{binId}")
     public void assignBin(@PathVariable int areaId, @PathVariable int binId) {
         areaService.assignBin(areaId, binId);
     }
 
-    @GetMapping("{areaId}/unassignBin/{binId}")
+    @GetMapping("{areaId}/unassign-bin/{binId}")
     public void unAssignBin(@PathVariable int areaId, @PathVariable int binId) {
         areaService.unAssignBin(areaId, binId);
+    }
+
+    @GetMapping("{areaId}/assign-employee/{employeeId}")
+    public void assignEmployee(@PathVariable int areaId, @PathVariable int employeeId) {
+        areaService.assignEmployee(areaId, employeeId);
+    }
+
+    @GetMapping("{areaId}/unassign-employee/{employeeId}")
+    public void unAssignEmployee(@PathVariable int areaId, @PathVariable int employeeId) {
+        areaService.unAssignEmployee(areaId, employeeId);
     }
 
 }
