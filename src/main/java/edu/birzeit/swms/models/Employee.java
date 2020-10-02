@@ -5,6 +5,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import java.util.List;
 
 @Entity
 @Setter
@@ -16,4 +19,7 @@ import javax.persistence.EntityListeners;
 public class Employee extends User{
 
     private String address;
+
+    @ManyToMany(mappedBy = "employeeList")
+    private List<Area> areaList;
 }

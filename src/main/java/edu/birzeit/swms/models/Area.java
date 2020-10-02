@@ -20,8 +20,16 @@ public class Area {
     private int id;
     private String name;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "area")
     private List<Bin> binList;
+
+    @ToString.Exclude
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinTable(name = "area_employee",
+            joinColumns = @JoinColumn(name = "area_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "employee_id", referencedColumnName = "id"))
+    private List<Employee> employeeList;
 
 
 

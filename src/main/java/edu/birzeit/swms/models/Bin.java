@@ -28,7 +28,6 @@ public class Bin {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @ToString.Exclude
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumn(name = "area_id")
     private Area area;
