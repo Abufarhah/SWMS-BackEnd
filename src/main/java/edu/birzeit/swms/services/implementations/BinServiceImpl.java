@@ -50,6 +50,7 @@ public class BinServiceImpl implements BinService {
     public BinDto updateBin(BinDto binDto, int id) {
         if (binRepository.existsById(id)) {
             Bin bin = binMapper.dtoToBin(binDto);
+            bin.setId(id);
             Bin savedBin = binRepository.save(bin);
             BinDto savedBinDto = binMapper.binToDto(savedBin);
             return savedBinDto;

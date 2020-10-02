@@ -61,6 +61,7 @@ public class AreaServiceImpl implements AreaService {
     public AreaDto updateArea(AreaDto areaDto, int id) {
         if (areaRepository.existsById(id)) {
             Area area = areaMapper.dtoToArea(areaDto);
+            area.setId(id);
             Area savedArea = areaRepository.save(area);
             AreaDto savedAreaDto = areaMapper.areaToDto(savedArea);
             return savedAreaDto;
