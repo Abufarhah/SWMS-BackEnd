@@ -13,6 +13,7 @@ import javax.validation.constraints.Pattern;
 @NoArgsConstructor
 public class EmployeeDto {
 
+    @ApiModelProperty(notes = "The database generated employee ID")
     private int id;
     private String firstName;
     private String lastName;

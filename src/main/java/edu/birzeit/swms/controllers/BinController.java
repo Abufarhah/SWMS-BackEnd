@@ -4,8 +4,11 @@ import edu.birzeit.swms.dtos.BinDto;
 import edu.birzeit.swms.enums.Status;
 import edu.birzeit.swms.services.BinService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +17,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/bins")
 @Api(tags = "Operations related to bins in SWMS")
+@ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Successfully done operation"),
+        @ApiResponse(code = 201, message = "Successfully created entity"),
+        @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
+})
 public class BinController {
 
     @Autowired
@@ -30,6 +38,7 @@ public class BinController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public BinDto addBin(@RequestBody BinDto binDto) {
         return binService.addBin(binDto);
     }

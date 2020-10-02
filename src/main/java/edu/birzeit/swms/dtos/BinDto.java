@@ -1,6 +1,7 @@
 package edu.birzeit.swms.dtos;
 
 import edu.birzeit.swms.enums.Status;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ import javax.persistence.Enumerated;
 @NoArgsConstructor
 public class BinDto {
 
+    @ApiModelProperty(notes = "The database generated bin ID")
     private int id;
     private double latitude;
     private double longitude;

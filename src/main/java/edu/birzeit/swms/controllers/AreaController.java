@@ -9,8 +9,11 @@ import edu.birzeit.swms.models.Area;
 import edu.birzeit.swms.models.Bin;
 import edu.birzeit.swms.services.AreaService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -20,6 +23,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/areas")
 @Api(tags = "Operations related to areas in SWMS")
+@ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Successfully done operation"),
+        @ApiResponse(code = 201, message = "Successfully created entity"),
+        @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
+})
 public class AreaController {
 
     @Autowired
@@ -36,6 +44,7 @@ public class AreaController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public AreaDto addArea(@RequestBody AreaDto areaDto) {
         return areaService.addArea(areaDto);
     }
