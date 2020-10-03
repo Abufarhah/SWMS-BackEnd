@@ -58,4 +58,5 @@ public class EmployeeController {
     public List<AreaDto> getAreasOfEmployee(@PathVariable int id) {
         return employeeService.getAreasOfEmployee(id);
     }
+
 }
