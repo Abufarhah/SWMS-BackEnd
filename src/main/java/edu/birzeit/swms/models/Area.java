@@ -25,7 +25,7 @@ public class Area {
     private List<Bin> binList;
 
     @ToString.Exclude
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "area_employee",
             joinColumns = @JoinColumn(name = "area_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "employee_id", referencedColumnName = "id"))

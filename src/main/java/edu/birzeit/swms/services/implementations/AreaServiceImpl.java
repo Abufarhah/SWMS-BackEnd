@@ -2,11 +2,13 @@ package edu.birzeit.swms.services.implementations;
 
 import edu.birzeit.swms.dtos.AreaDto;
 import edu.birzeit.swms.dtos.BinDto;
+import edu.birzeit.swms.dtos.EmployeeDto;
 import edu.birzeit.swms.exceptions.ResourceAssignedException;
 import edu.birzeit.swms.exceptions.ResourceNotAssignedException;
 import edu.birzeit.swms.exceptions.ResourceNotFoundException;
 import edu.birzeit.swms.mappers.AreaMapper;
 import edu.birzeit.swms.mappers.BinMapper;
+import edu.birzeit.swms.mappers.EmployeeMapper;
 import edu.birzeit.swms.models.Area;
 import edu.birzeit.swms.models.Bin;
 import edu.birzeit.swms.models.Employee;
@@ -39,6 +41,9 @@ public class AreaServiceImpl implements AreaService {
 
     @Autowired
     BinMapper binMapper;
+
+    @Autowired
+    EmployeeMapper employeeMapper;
 
     @Override
     public List<AreaDto> getAreas() {
@@ -119,8 +124,8 @@ public class AreaServiceImpl implements AreaService {
         if (area.getEmployeeList().contains(employee)) {
             throw new ResourceAssignedException("Area", areaId, "Employee", employeeId);
         } else {
-            employee.getAreaList().add(area);
-            employeeRepository.save(employee);
+            area.getEmployeeList().add(employee);
+            areaRepository.save(area);
         }
     }
 
@@ -134,6 +139,14 @@ public class AreaServiceImpl implements AreaService {
         } else {
             throw new ResourceNotAssignedException("Area", areaId, "Employee", employeeId);
         }
+    }
+
+    @Override
+    public List<EmployeeDto> getEmployeesOfArea(int id) {
+        Area area = areaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Area", "id", id));
+        List<EmployeeDto> employeeDtoList = new ArrayList<>();
+        area.getEmployeeList().forEach(employee -> employeeDtoList.add(employeeMapper.employeeToDto(employee)));
+        return employeeDtoList;
     }
 
 }

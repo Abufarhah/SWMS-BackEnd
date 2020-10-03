@@ -2,6 +2,7 @@ package edu.birzeit.swms.services;
 
 import edu.birzeit.swms.dtos.AreaDto;
 import edu.birzeit.swms.dtos.BinDto;
+import edu.birzeit.swms.dtos.EmployeeDto;
 import edu.birzeit.swms.exceptions.ResourceAssignedException;
 import edu.birzeit.swms.exceptions.ResourceNotFoundException;
 import edu.birzeit.swms.models.Area;
@@ -30,5 +31,7 @@ public interface AreaService {
     void assignEmployee(int areaId, int employeeId);
 
     void unAssignEmployee(int areaId, int employeeId);
+
+    List<EmployeeDto> getEmployeesOfArea(int id);
 
 }

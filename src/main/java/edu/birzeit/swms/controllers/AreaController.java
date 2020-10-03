@@ -2,6 +2,7 @@ package edu.birzeit.swms.controllers;
 
 import edu.birzeit.swms.dtos.AreaDto;
 import edu.birzeit.swms.dtos.BinDto;
+import edu.birzeit.swms.dtos.EmployeeDto;
 import edu.birzeit.swms.exceptions.ResourceAssignedException;
 import edu.birzeit.swms.exceptions.ResourceNotAssignedException;
 import edu.birzeit.swms.exceptions.ResourceNotFoundException;
@@ -83,5 +84,11 @@ public class AreaController {
     public void unAssignEmployee(@PathVariable int areaId, @PathVariable int employeeId) {
         areaService.unAssignEmployee(areaId, employeeId);
     }
+
+    @GetMapping("/{id}/employees")
+    public List<EmployeeDto> getEmployeesOfArea(@PathVariable int id) {
+        return areaService.getEmployeesOfArea(id);
+    }
+
 
 }

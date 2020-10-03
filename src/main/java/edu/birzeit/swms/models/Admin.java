@@ -13,6 +13,6 @@ import javax.persistence.EntityListeners;
 @AllArgsConstructor
 //@NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class Citizen extends User{
+public class Admin extends User{
 
 }
