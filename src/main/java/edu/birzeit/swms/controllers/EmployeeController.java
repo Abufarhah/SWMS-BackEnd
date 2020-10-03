@@ -1,5 +1,6 @@
 package edu.birzeit.swms.controllers;
 
+import edu.birzeit.swms.dtos.AreaDto;
 import edu.birzeit.swms.dtos.EmployeeDto;
 import edu.birzeit.swms.services.EmployeeService;
 import io.swagger.annotations.Api;
@@ -53,4 +54,8 @@ public class EmployeeController {
         employeeService.deleteEmployee(id);
     }
 
+    @GetMapping("/{id}/areas")
+    public List<AreaDto> getAreasOfEmployee(@PathVariable int id) {
+        return employeeService.getAreasOfEmployee(id);
+    }
 }

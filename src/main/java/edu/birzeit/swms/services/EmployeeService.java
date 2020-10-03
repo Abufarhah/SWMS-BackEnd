@@ -1,5 +1,6 @@
 package edu.birzeit.swms.services;
 
+import edu.birzeit.swms.dtos.AreaDto;
 import edu.birzeit.swms.dtos.EmployeeDto;
 
 import java.util.List;
@@ -15,5 +16,7 @@ public interface EmployeeService {
     EmployeeDto updateEmployee(EmployeeDto employeeDto, int id);
 
     void deleteEmployee(int id);
+
+    List<AreaDto> getAreasOfEmployee(int id);
 
 }
