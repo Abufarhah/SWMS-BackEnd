@@ -1,10 +1,11 @@
 package edu.birzeit.swms.dtos;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.Pattern;
 
 @Data
 @AllArgsConstructor
@@ -15,7 +16,9 @@ public class CitizenDto {
     private int id;
     private String firstName;
     private String lastName;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "05-")
+    @ApiModelProperty(example = "0599123456")
+    @Pattern(regexp="(^$|^05[0-9]{8})")
     private String phone;
+    private String address;
     private String username;
 }
