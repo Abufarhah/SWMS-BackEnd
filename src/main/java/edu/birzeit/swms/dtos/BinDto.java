@@ -18,8 +18,11 @@ public class BinDto {
 
     @ApiModelProperty(notes = "The database generated bin ID")
     private int id;
+    @ApiModelProperty(notes = "defines latitude coordinate of the bin")
     private double latitude;
+    @ApiModelProperty(notes = "defines longitude coordinate of the bin")
     private double longitude;
+    @ApiModelProperty(notes = "defines the status of the bin in terms of fullness")
     @Enumerated(EnumType.STRING)
     private Status status;
 

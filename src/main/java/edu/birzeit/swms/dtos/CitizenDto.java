@@ -1,5 +1,6 @@
 package edu.birzeit.swms.dtos;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,6 +15,7 @@ public class CitizenDto {
     private int id;
     private String firstName;
     private String lastName;
-    private int phone;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "05-")
+    private String phone;
     private String username;
 }
