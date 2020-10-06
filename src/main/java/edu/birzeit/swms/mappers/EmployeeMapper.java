@@ -1,8 +1,6 @@
 package edu.birzeit.swms.mappers;
 
-import edu.birzeit.swms.dtos.BinDto;
 import edu.birzeit.swms.dtos.EmployeeDto;
-import edu.birzeit.swms.models.Bin;
 import edu.birzeit.swms.models.Employee;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
