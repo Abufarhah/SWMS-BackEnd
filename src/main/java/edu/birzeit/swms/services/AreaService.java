@@ -3,10 +3,6 @@ package edu.birzeit.swms.services;
 import edu.birzeit.swms.dtos.AreaDto;
 import edu.birzeit.swms.dtos.BinDto;
 import edu.birzeit.swms.dtos.EmployeeDto;
-import edu.birzeit.swms.exceptions.ResourceAssignedException;
-import edu.birzeit.swms.exceptions.ResourceNotFoundException;
-import edu.birzeit.swms.models.Area;
-import edu.birzeit.swms.models.Employee;
 
 import java.util.List;
 

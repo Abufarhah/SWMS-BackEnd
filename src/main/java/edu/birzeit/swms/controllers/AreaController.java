@@ -3,11 +3,6 @@ package edu.birzeit.swms.controllers;
 import edu.birzeit.swms.dtos.AreaDto;
 import edu.birzeit.swms.dtos.BinDto;
 import edu.birzeit.swms.dtos.EmployeeDto;
-import edu.birzeit.swms.exceptions.ResourceAssignedException;
-import edu.birzeit.swms.exceptions.ResourceNotAssignedException;
-import edu.birzeit.swms.exceptions.ResourceNotFoundException;
-import edu.birzeit.swms.models.Area;
-import edu.birzeit.swms.models.Bin;
 import edu.birzeit.swms.services.AreaService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiResponse;
@@ -17,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Log

@@ -1,8 +1,6 @@
 package edu.birzeit.swms.controllers;
 
 import edu.birzeit.swms.dtos.CitizenDto;
-import edu.birzeit.swms.exceptions.ResourceNotFoundException;
-import edu.birzeit.swms.models.Citizen;
 import edu.birzeit.swms.services.CitizenService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiResponse;
@@ -13,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Log

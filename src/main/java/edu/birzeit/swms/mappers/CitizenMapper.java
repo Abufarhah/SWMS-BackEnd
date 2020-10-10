@@ -1,9 +1,7 @@
 package edu.birzeit.swms.mappers;
 
 import edu.birzeit.swms.dtos.CitizenDto;
-import edu.birzeit.swms.dtos.EmployeeDto;
 import edu.birzeit.swms.models.Citizen;
-import edu.birzeit.swms.models.Employee;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,4 +19,5 @@ public class CitizenMapper {
     public CitizenDto citizenToDto(Citizen citizen) {
         return modelMapper.map(citizen, CitizenDto.class);
     }
+
 }

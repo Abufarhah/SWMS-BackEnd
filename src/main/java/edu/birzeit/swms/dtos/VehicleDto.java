@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class VehicleDto {
 
-    @ApiModelProperty(notes = "The database generated vehicle ID")
+    @ApiModelProperty(notes = "The database generates vehicle ID")
     private int id;
     private String number;
 

@@ -20,6 +20,10 @@ public class ResourceAssignedException extends RuntimeException {
         this.assignedResourceId = assignedResourceId;
     }
 
+    public String getResourceName() {
+        return resourceName;
+    }
+
     public void setResourceName(String resourceName) {
         this.resourceName = resourceName;
     }

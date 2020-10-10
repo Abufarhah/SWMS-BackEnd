@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AreaDto {
+public class ReportDto {
 
-    @ApiModelProperty(notes = "The database generates area ID")
+    @ApiModelProperty(notes = "The database generates report ID")
     private int id;
-    @ApiModelProperty(notes = "defines the name of the area")
-    private String name;
+    private String subject;
+    private String body;
 
 }

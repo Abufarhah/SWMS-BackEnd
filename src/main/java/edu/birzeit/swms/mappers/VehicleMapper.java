@@ -19,4 +19,5 @@ public class VehicleMapper {
     public VehicleDto vehicleToDto(Vehicle vehicle) {
         return modelMapper.map(vehicle, VehicleDto.class);
     }
+
 }

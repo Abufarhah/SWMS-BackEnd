@@ -9,7 +9,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Setter
@@ -18,21 +17,18 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class User {
+public class Report {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String firstName;
-    private String lastName;
-    private String phone;
-    private String address;
-    private String username;
-    private String password;
+    private String subject;
+    @Column(length = 1024)
+    private String body;
 
-    @ToString.Exclude
-    @OneToMany(mappedBy = "from")
-    private List<Report> reportList;
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User from;
 
     @CreatedBy
     @Column(nullable = false, updatable = false)

@@ -12,7 +12,7 @@ import javax.validation.constraints.Pattern;
 @NoArgsConstructor
 public class CitizenDto {
 
-    @ApiModelProperty(notes = "The database generated citizen ID")
+    @ApiModelProperty(notes = "The database generates citizen ID")
     private int id;
     private String firstName;
     private String lastName;

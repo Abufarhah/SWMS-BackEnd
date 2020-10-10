@@ -5,9 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
@@ -16,7 +14,7 @@ import javax.persistence.Enumerated;
 @NoArgsConstructor
 public class BinDto {
 
-    @ApiModelProperty(notes = "The database generated bin ID")
+    @ApiModelProperty(notes = "The database generates bin ID")
     private int id;
     @ApiModelProperty(notes = "defines latitude coordinate of the bin")
     private double latitude;

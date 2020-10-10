@@ -1,6 +1,6 @@
 package edu.birzeit.swms.exceptions;
 
-public class ResourceNotAssignedException extends RuntimeException{
+public class ResourceNotAssignedException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
     private String resourceName;
@@ -18,6 +18,10 @@ public class ResourceNotAssignedException extends RuntimeException{
         this.resourceId = resourceId;
         this.assignedResourceName = assignedResourceName;
         this.assignedResourceId = assignedResourceId;
+    }
+
+    public String getResourceName() {
+        return resourceName;
     }
 
     public void setResourceName(String resourceName) {

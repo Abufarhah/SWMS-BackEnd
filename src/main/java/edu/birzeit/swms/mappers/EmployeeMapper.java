@@ -19,4 +19,5 @@ public class EmployeeMapper {
     public EmployeeDto employeeToDto(Employee employee) {
         return modelMapper.map(employee, EmployeeDto.class);
     }
+
 }
