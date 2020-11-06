@@ -55,7 +55,6 @@ public class BinController {
 
     @PutMapping
     public BinDto updateBinStatus(@RequestParam Status status, int id) {
-        log.info("updateBinStatus");
         return binService.updateBinStatus(status, id);
     }
 

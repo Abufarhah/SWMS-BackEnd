@@ -67,7 +67,6 @@ public class BinServiceImpl implements BinService {
 
     @Override
     public BinDto updateBinStatus(Status status, int id) {
-        log.info("updateBinStatus");
         Bin bin = binRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Bin", "id", id));
         bin.setStatus(status);
         Bin savedBin = binRepository.save(bin);
