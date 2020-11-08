@@ -2,9 +2,7 @@ package edu.birzeit.swms.controllers;
 
 import edu.birzeit.swms.dtos.VehicleDto;
 import edu.birzeit.swms.services.VehicleService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,27 +25,32 @@ public class VehicleController {
     VehicleService vehicleService;
 
     @GetMapping
+    @ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
     public List<VehicleDto> getVehicles() {
         return vehicleService.getVehicles();
     }
 
     @GetMapping("/{id}")
+    @ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
     public VehicleDto getVehicle(@PathVariable int id) {
         return vehicleService.getVehicle(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
     public VehicleDto addVehicle(@RequestBody VehicleDto vehicleDto) {
         return vehicleService.addVehicle(vehicleDto);
     }
 
     @PutMapping("/{id}")
+    @ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
     public VehicleDto updateVehicle(@RequestBody VehicleDto vehicleDto, @PathVariable int id) {
         return vehicleService.updateVehicle(vehicleDto, id);
     }
 
     @DeleteMapping("/{id}")
+    @ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
     public void deleteVehicle(@PathVariable int id) {
         vehicleService.deleteVehicle(id);
     }

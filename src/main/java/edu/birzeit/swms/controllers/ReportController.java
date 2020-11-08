@@ -2,9 +2,7 @@ package edu.birzeit.swms.controllers;
 
 import edu.birzeit.swms.dtos.ReportDto;
 import edu.birzeit.swms.services.ReportService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,27 +25,32 @@ public class ReportController {
     ReportService reportService;
 
     @GetMapping
+    @ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
     public List<ReportDto> getReports() {
         return reportService.getReports();
     }
 
     @GetMapping("/{id}")
+    @ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
     public ReportDto getReport(@PathVariable int id) {
         return reportService.getReport(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
     public ReportDto addReport(@RequestBody ReportDto reportDto) {
         return reportService.addReport(reportDto);
     }
 
     @PutMapping("/{id}")
+    @ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
     public ReportDto updateReport(@RequestBody ReportDto reportDto, @PathVariable int id) {
         return reportService.updateReport(reportDto, id);
     }
 
     @DeleteMapping("/{id}")
+    @ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
     public void deleteReport(@PathVariable int id) {
         reportService.deleteReport(id);
     }

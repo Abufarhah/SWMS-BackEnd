@@ -3,9 +3,7 @@ package edu.birzeit.swms.controllers;
 import edu.birzeit.swms.dtos.AreaDto;
 import edu.birzeit.swms.dtos.EmployeeDto;
 import edu.birzeit.swms.services.EmployeeService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,32 +27,38 @@ public class EmployeeController {
     EmployeeService employeeService;
 
     @GetMapping
+    @ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
     public List<EmployeeDto> getEmployees() {
         return employeeService.getEmployees();
     }
 
     @GetMapping("/{id}")
+    @ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
     public EmployeeDto getEmployee(@PathVariable int id) {
         return employeeService.getEmployee(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
     public EmployeeDto addEmployee(@Validated @RequestBody EmployeeDto employeeDto) {
         return employeeService.addEmployee(employeeDto);
     }
 
     @PutMapping("/{id}")
+    @ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
     public EmployeeDto updateEmployee(@Validated @RequestBody EmployeeDto employeeDto, @PathVariable int id) {
         return employeeService.updateEmployee(employeeDto, id);
     }
 
     @DeleteMapping("/{id}")
+    @ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
     public void deleteEmployee(@PathVariable int id) {
         employeeService.deleteEmployee(id);
     }
 
     @GetMapping("/{id}/areas")
+    @ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
     public List<AreaDto> getAreasOfEmployee(@PathVariable int id) {
         return employeeService.getAreasOfEmployee(id);
     }

@@ -2,9 +2,7 @@ package edu.birzeit.swms.controllers;
 
 import edu.birzeit.swms.dtos.CitizenDto;
 import edu.birzeit.swms.services.CitizenService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,27 +26,32 @@ public class CitizenController {
     CitizenService citizenService;
 
     @GetMapping
+    @ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
     public List<CitizenDto> getCitizens() {
         return citizenService.getCitizens();
     }
 
     @GetMapping("/{id}")
+    @ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
     public CitizenDto getCitizen(@PathVariable int id) {
         return citizenService.getCitizen(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
     public CitizenDto addCitizen(@Validated @RequestBody CitizenDto citizenDto) {
         return citizenService.addCitizen(citizenDto);
     }
 
     @PutMapping("/{id}")
+    @ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
     public CitizenDto updateCitizen(@Validated @RequestBody CitizenDto citizenDto, @PathVariable int id) {
         return citizenService.updateCitizen(citizenDto, id);
     }
 
     @DeleteMapping("/{id}")
+    @ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
     public void deleteCitizen(@PathVariable int id) {
         citizenService.deleteCitizen(id);
     }
