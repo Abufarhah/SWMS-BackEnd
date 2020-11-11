@@ -74,4 +74,14 @@ public class BinServiceImpl implements BinService {
         return savedBinDto;
     }
 
+    @Override
+    public List<BinDto> findByStatus(Status status){
+        List<BinDto> binDtoList = new ArrayList<>();
+        binRepository.findByStatus(status).forEach(bin -> binDtoList.add(binMapper.binToDto(bin)));
+        return binDtoList;
+    }
+
+
+
+
 }

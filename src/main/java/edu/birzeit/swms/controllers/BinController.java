@@ -3,12 +3,11 @@ package edu.birzeit.swms.controllers;
 import edu.birzeit.swms.dtos.BinDto;
 import edu.birzeit.swms.enums.Status;
 import edu.birzeit.swms.services.BinService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,8 +27,13 @@ public class BinController {
     BinService binService;
 
     @GetMapping
-    public List<BinDto> getBins() {
-        return binService.getBins();
+//    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
+    public List<BinDto> getBins(@ApiParam(value = "Filter the list",required = false) @Nullable @RequestParam Status status) {
+        if (status != null) {
+            return binService.findByStatus(status);
+        } else {
+            return binService.getBins();
+        }
     }
 
     @GetMapping("/{id}")

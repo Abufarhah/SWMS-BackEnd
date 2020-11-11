@@ -19,5 +19,7 @@ public interface BinService {
 
     BinDto updateBinStatus(Status status, int id);
 
+    List<BinDto> findByStatus(Status status);
+
 
 }
