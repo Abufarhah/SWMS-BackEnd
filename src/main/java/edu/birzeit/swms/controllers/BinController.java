@@ -27,7 +27,7 @@ public class BinController {
     BinService binService;
 
     @GetMapping
-//    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
+    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
     public List<BinDto> getBins(@ApiParam(value = "Filter the list",required = false) @Nullable @RequestParam Status status) {
         if (status != null) {
             return binService.findByStatus(status);
@@ -37,27 +37,32 @@ public class BinController {
     }
 
     @GetMapping("/{id}")
+    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
     public BinDto getBin(@PathVariable int id) {
         return binService.getBin(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
     public BinDto addBin(@RequestBody BinDto binDto) {
         return binService.addBin(binDto);
     }
 
     @PutMapping("/{id}")
+    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
     public BinDto updateBin(@RequestBody BinDto binDto, @PathVariable int id) {
         return binService.updateBin(binDto, id);
     }
 
     @DeleteMapping("/{id}")
+    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
     public void deleteBin(@PathVariable int id) {
         binService.deleteBin(id);
     }
 
     @PutMapping
+    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
     public BinDto updateBinStatus(@RequestParam Status status, int id) {
         return binService.updateBinStatus(status, id);
     }
