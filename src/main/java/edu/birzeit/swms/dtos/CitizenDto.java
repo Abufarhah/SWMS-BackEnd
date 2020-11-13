@@ -17,8 +17,11 @@ public class CitizenDto {
     private String firstName;
     private String lastName;
     @ApiModelProperty(example = "0599123456")
-    @Pattern(regexp="(^$|^05[0-9]{8})")
+    @Pattern(regexp = "(^$|^05[0-9]{8})")
     private String phone;
     private String address;
     private String username;
+    private double latitude;
+    private double longitude;
+
 }

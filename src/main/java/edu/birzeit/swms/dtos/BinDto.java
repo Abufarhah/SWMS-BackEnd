@@ -23,5 +23,7 @@ public class BinDto {
     @ApiModelProperty(notes = "defines the status of the bin in terms of fullness")
     @Enumerated(EnumType.STRING)
     private Status status;
+    @ApiModelProperty(notes = "defines the id of the area")
+    private int areaId;
 
 }

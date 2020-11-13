@@ -11,8 +11,11 @@ import javax.persistence.EntityListeners;
 @Getter
 @ToString
 @AllArgsConstructor
-//@NoArgsConstructor
+@NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class Citizen extends User{
+
+    private double latitude;
+    private double longitude;
 
 }
