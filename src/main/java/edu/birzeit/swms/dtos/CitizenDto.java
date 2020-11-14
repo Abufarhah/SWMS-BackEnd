@@ -21,7 +21,5 @@ public class CitizenDto {
     private String phone;
     private String address;
     private String username;
-    private double latitude;
-    private double longitude;
 
 }

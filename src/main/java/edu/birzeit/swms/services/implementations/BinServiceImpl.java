@@ -14,8 +14,7 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Log
 @Service
@@ -43,7 +42,8 @@ public class BinServiceImpl implements BinService {
 
     @Override
     public BinDto getBin(int id) {
-        Bin bin = binRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Bin", "id", id));
+        Bin bin = binRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Bin", "id", id));
         BinDto binDto = binMapper.binToDto(bin);
         binDto.setAreaId(bin.getArea().getId());
         return binDto;
@@ -67,7 +67,7 @@ public class BinServiceImpl implements BinService {
                 () -> new ResourceNotFoundException("Bin", "id", id));
         bin.setLatitude(binDto.getLatitude());
         bin.setLongitude(binDto.getLongitude());
-        if (binDto.getAreaId() != 0) {
+        if (binDto.getAreaId() != 0 && bin.getArea().getId() != binDto.getAreaId()) {
             bin.setArea(areaRepository.findById(binDto.getAreaId()).orElseThrow(
                     () -> new ResourceNotFoundException("Area", "id", binDto.getAreaId())));
         }
@@ -87,7 +87,8 @@ public class BinServiceImpl implements BinService {
 
     @Override
     public BinDto updateBinStatus(Status status, int id) {
-        Bin bin = binRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Bin", "id", id));
+        Bin bin = binRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Bin", "id", id));
         bin.setStatus(status);
         Bin savedBin = binRepository.save(bin);
         BinDto savedBinDto = binMapper.binToDto(savedBin);
@@ -97,9 +98,38 @@ public class BinServiceImpl implements BinService {
     @Override
     public List<BinDto> findByStatus(Status status) {
         List<BinDto> binDtoList = new ArrayList<>();
-        binRepository.findByStatus(status).forEach(bin -> binDtoList.add(binMapper.binToDto(bin)));
+        binRepository.findByStatus(status).forEach(
+                bin -> binDtoList.add(binMapper.binToDto(bin)));
         return binDtoList;
     }
 
+    @Override
+    public List<BinDto> findByLocation(double latitude, double longitude, int n) {
+        PriorityQueue<Bin> priorityQueue = new PriorityQueue<>(
+                Comparator.comparingDouble(o -> getDistance(o, latitude, longitude)));
+        binRepository.findAll().forEach(bin -> priorityQueue.add(bin));
+        List<BinDto> nearestBins = new ArrayList<>();
+        int count = n;
+        while (count != 0 && priorityQueue.size() != 0) {
+            nearestBins.add(binMapper.binToDto(priorityQueue.remove()));
+            count--;
+        }
+        return nearestBins;
+    }
 
+    private double getDistance(Bin bin, double latitude, double longitude) {
+        if ((bin.getLatitude() == latitude) && (bin.getLongitude() == longitude)) {
+            return 0;
+        } else {
+            double theta = bin.getLongitude() - longitude;
+            double dist = Math.sin(Math.toRadians(bin.getLatitude()))
+                    * Math.sin(Math.toRadians(latitude))
+                    + Math.cos(Math.toRadians(bin.getLatitude()))
+                    * Math.cos(Math.toRadians(latitude))
+                    * Math.cos(Math.toRadians(theta));
+            dist = Math.acos(dist);
+            dist = Math.toDegrees(dist);
+            return dist;
+        }
+    }
 }
