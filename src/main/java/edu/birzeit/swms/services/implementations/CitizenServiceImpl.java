@@ -2,6 +2,7 @@ package edu.birzeit.swms.services.implementations;
 
 import edu.birzeit.swms.dtos.CitizenDto;
 import edu.birzeit.swms.dtos.EmployeeDto;
+import edu.birzeit.swms.enums.UserRole;
 import edu.birzeit.swms.exceptions.ResourceNotFoundException;
 import edu.birzeit.swms.mappers.CitizenMapper;
 import edu.birzeit.swms.models.Citizen;
@@ -10,6 +11,7 @@ import edu.birzeit.swms.repositories.CitizenRepository;
 import edu.birzeit.swms.services.CitizenService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,6 +26,9 @@ public class CitizenServiceImpl implements CitizenService {
 
     @Autowired
     CitizenMapper citizenMapper;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Override
     public List<CitizenDto> getCitizens() {
@@ -42,6 +47,8 @@ public class CitizenServiceImpl implements CitizenService {
     @Override
     public CitizenDto addCitizen(CitizenDto citizenDto) {
         Citizen citizen = citizenMapper.dtoToCitizen(citizenDto);
+        citizen.setRole(UserRole.CITIZEN);
+        citizen.setPassword(passwordEncoder.encode("swms" + citizen.getUsername()));
         Citizen savedCitizen = citizenRepository.save(citizen);
         CitizenDto savedCitizenDto = citizenMapper.citizenToDto(savedCitizen);
         return savedCitizenDto;
@@ -54,6 +61,7 @@ public class CitizenServiceImpl implements CitizenService {
         citizen.setLastName(citizenDto.getLastName());
         citizen.setPhone(citizenDto.getPhone());
         citizen.setAddress(citizenDto.getAddress());
+        citizen.setRole(UserRole.CITIZEN);
         Citizen savedCitizen = citizenRepository.save(citizen);
         CitizenDto savedCitizenDto = citizenMapper.citizenToDto(savedCitizen);
         return savedCitizenDto;
