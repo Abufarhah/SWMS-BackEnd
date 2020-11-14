@@ -33,6 +33,7 @@ public class User implements UserDetails {
     private String address;
     private String username;
     private String password;
+    @Enumerated(EnumType.STRING)
     private UserRole role;
 
     @ToString.Exclude

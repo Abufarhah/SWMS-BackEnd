@@ -3,6 +3,7 @@ package edu.birzeit.swms.services.implementations;
 import edu.birzeit.swms.dtos.AreaDto;
 import edu.birzeit.swms.dtos.BinDto;
 import edu.birzeit.swms.dtos.EmployeeDto;
+import edu.birzeit.swms.enums.UserRole;
 import edu.birzeit.swms.exceptions.ResourceNotFoundException;
 import edu.birzeit.swms.mappers.AreaMapper;
 import edu.birzeit.swms.mappers.EmployeeMapper;
@@ -12,6 +13,7 @@ import edu.birzeit.swms.repositories.EmployeeRepository;
 import edu.birzeit.swms.services.EmployeeService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,6 +32,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     AreaMapper areaMapper;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     @Override
     public List<EmployeeDto> getEmployees() {
         List<EmployeeDto> employeeDtoList = new ArrayList<>();
@@ -47,6 +52,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeDto addEmployee(EmployeeDto employeeDto) {
         Employee employee = employeeMapper.dtoToEmployee(employeeDto);
+        employee.setRole(UserRole.EMPLOYEE);
+        employee.setPassword(passwordEncoder.encode("swms"+employee.getUsername()));
         Employee savedEmployee = employeeRepository.save(employee);
         EmployeeDto savedEmployeeDto = employeeMapper.employeeToDto(savedEmployee);
         return savedEmployeeDto;
@@ -59,6 +66,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setLastName(employeeDto.getLastName());
         employee.setPhone(employeeDto.getPhone());
         employee.setAddress(employeeDto.getAddress());
+        employee.setRole(UserRole.EMPLOYEE);
+
         Employee savedEmployee = employeeRepository.save(employee);
         EmployeeDto savedEmployeeDto = employeeMapper.employeeToDto(savedEmployee);
         return savedEmployeeDto;
