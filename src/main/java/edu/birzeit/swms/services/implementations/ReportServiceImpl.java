@@ -51,7 +51,7 @@ public class ReportServiceImpl implements ReportService {
         reportRepository.findAll().forEach(report -> {
             ReportDto reportDto = reportMapper.reportToDto(report);
             reportDto.setBinId(report.getBin().getId());
-            reportDto.setSentBy(report.getFrom().getUsername());
+            reportDto.setUserId(report.getFrom().getId());
             reportDtoList.add(reportDto);
         });
         return reportDtoList;
@@ -63,7 +63,7 @@ public class ReportServiceImpl implements ReportService {
                 () -> new ResourceNotFoundException("Report", "id", id));
         ReportDto reportDto = reportMapper.reportToDto(report);
         reportDto.setBinId(report.getBin().getId());
-        reportDto.setSentBy(report.getFrom().getUsername());
+        reportDto.setUserId(report.getFrom().getId());
         return reportDto;
     }
 
