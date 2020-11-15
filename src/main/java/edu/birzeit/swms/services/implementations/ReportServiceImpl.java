@@ -1,10 +1,12 @@
 package edu.birzeit.swms.services.implementations;
 
+import edu.birzeit.swms.configurations.Constants;
 import edu.birzeit.swms.dtos.ReportDto;
 import edu.birzeit.swms.enums.UserRole;
 import edu.birzeit.swms.exceptions.ResourceNotFoundException;
 import edu.birzeit.swms.mappers.ReportMapper;
 import edu.birzeit.swms.models.Report;
+import edu.birzeit.swms.models.User;
 import edu.birzeit.swms.repositories.BinRepository;
 import edu.birzeit.swms.repositories.ReportRepository;
 import edu.birzeit.swms.repositories.UserRepository;
@@ -40,6 +42,9 @@ public class ReportServiceImpl implements ReportService {
     @Autowired
     SWMSUtil util;
 
+    @Autowired
+    User admin;
+
     @Override
     public List<ReportDto> getReports() {
         List<ReportDto> reportDtoList = new ArrayList<>();
@@ -70,8 +75,12 @@ public class ReportServiceImpl implements ReportService {
                     () -> new ResourceNotFoundException("Bin", "id", reportDto.getBinId())));
         }
         String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-        report.setFrom(userRepository.findByUsername(username).orElseThrow(
-                () -> new ResourceNotFoundException("User", "username", username)));
+        if(username.equals(Constants.ADMIN_USERNAME)){
+            report.setFrom(admin);
+        }else {
+            report.setFrom(userRepository.findByUsername(username).orElseThrow(
+                    () -> new ResourceNotFoundException("User", "username", username)));
+        }
         Report savedReport = reportRepository.save(report);
         ReportDto savedReportDto = reportMapper.reportToDto(savedReport);
         return savedReportDto;
