@@ -6,6 +6,7 @@ import edu.birzeit.swms.services.BinService;
 import io.swagger.annotations.*;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import java.awt.Point;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
@@ -30,11 +31,10 @@ public class BinController {
     @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
     public List<BinDto> getBins(
             @ApiParam(value = "Filter the list in terms of status") @Nullable @RequestParam Status status,
-            @ApiParam(value = "Get the closest n bins to the passed location",example = "31.9031538") @Nullable @RequestParam Double latitude,
-            @ApiParam(value = "Get the closest n bins to the passed location",example = "35.1977646") @Nullable @RequestParam Double longitude,
-            @ApiParam(value = "Get the closest n bins to the passed location",example = "5") @Nullable @RequestParam Integer n) {
-        if (latitude != null && longitude != null && n != null) {
-            return binService.findByLocation(latitude, longitude, n);
+            @ApiParam(value = "Get the closest n bins to the passed location") @Nullable @RequestParam Point location,
+            @ApiParam(value = "Get the closest n bins to the passed location", example = "5") @Nullable @RequestParam Integer n) {
+        if (location != null && n != null) {
+            return binService.findByLocation(location, n);
         } else if (status != null) {
             return binService.findByStatus(status);
         } else {

@@ -71,6 +71,7 @@ public class AreaServiceImpl implements AreaService {
     public AreaDto updateArea(AreaDto areaDto, int id) {
         Area area = areaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Area", "id", id));
         area.setName(areaDto.getName());
+        area.setPolygon(areaDto.getPolygon());
         Area savedArea = areaRepository.save(area);
         AreaDto savedAreaDto = areaMapper.areaToDto(savedArea);
         return savedAreaDto;

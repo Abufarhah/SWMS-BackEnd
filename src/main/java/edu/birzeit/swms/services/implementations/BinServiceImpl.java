@@ -8,13 +8,17 @@ import edu.birzeit.swms.models.Area;
 import edu.birzeit.swms.models.Bin;
 import edu.birzeit.swms.repositories.AreaRepository;
 import edu.birzeit.swms.repositories.BinRepository;
-import edu.birzeit.swms.services.AreaService;
 import edu.birzeit.swms.services.BinService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.awt.*;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.PriorityQueue;
 
 @Log
 @Service
@@ -52,10 +56,16 @@ public class BinServiceImpl implements BinService {
     @Override
     public BinDto addBin(BinDto binDto) {
         Bin bin = binMapper.dtoToBin(binDto);
-        if (binDto.getAreaId() != 0) {
-            bin.setArea(areaRepository.findById(binDto.getAreaId()).orElseThrow(
-                    () -> new ResourceNotFoundException("Area", "id", binDto.getAreaId())));
+        Area area = null;
+        List<Area> areaList = new ArrayList<>();
+        areaRepository.findAll().forEach(a -> areaList.add(a));
+        for (Area a : areaList) {
+            if (a.getPolygon().contains(binDto.getLocation())) {
+                area = a;
+                break;
+            }
         }
+        bin.setArea(area);
         Bin savedBin = binRepository.save(bin);
         BinDto savedBinDto = binMapper.binToDto(savedBin);
         return savedBinDto;
@@ -65,11 +75,18 @@ public class BinServiceImpl implements BinService {
     public BinDto updateBin(BinDto binDto, int id) {
         Bin bin = binRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Bin", "id", id));
-        bin.setLatitude(binDto.getLatitude());
-        bin.setLongitude(binDto.getLongitude());
-        if (binDto.getAreaId() != 0 && bin.getArea().getId() != binDto.getAreaId()) {
-            bin.setArea(areaRepository.findById(binDto.getAreaId()).orElseThrow(
-                    () -> new ResourceNotFoundException("Area", "id", binDto.getAreaId())));
+        bin.setLocation(binDto.getLocation());
+        if (!bin.getLocation().equals(binDto.getLocation())) {
+            Area area = null;
+            List<Area> areaList = new ArrayList<>();
+            areaRepository.findAll().forEach(a -> areaList.add(a));
+            for (Area a : areaList) {
+                if (a.getPolygon().contains(binDto.getLocation())) {
+                    area = a;
+                    break;
+                }
+            }
+            bin.setArea(area);
         }
         Bin savedBin = binRepository.save(bin);
         BinDto savedBinDto = binMapper.binToDto(savedBin);
@@ -104,9 +121,9 @@ public class BinServiceImpl implements BinService {
     }
 
     @Override
-    public List<BinDto> findByLocation(double latitude, double longitude, int n) {
+    public List<BinDto> findByLocation(Point location, int n) {
         PriorityQueue<Bin> priorityQueue = new PriorityQueue<>(
-                Comparator.comparingDouble(o -> getDistance(o, latitude, longitude)));
+                Comparator.comparingDouble(o -> getDistance(o, location.getX(), location.getY())));
         binRepository.findAll().forEach(bin -> priorityQueue.add(bin));
         List<BinDto> nearestBins = new ArrayList<>();
         int count = n;
@@ -118,13 +135,13 @@ public class BinServiceImpl implements BinService {
     }
 
     private double getDistance(Bin bin, double latitude, double longitude) {
-        if ((bin.getLatitude() == latitude) && (bin.getLongitude() == longitude)) {
+        if ((bin.getLocation().getX() == latitude) && (bin.getLocation().getY() == longitude)) {
             return 0;
         } else {
-            double theta = bin.getLongitude() - longitude;
-            double dist = Math.sin(Math.toRadians(bin.getLatitude()))
+            double theta = bin.getLocation().getY() - longitude;
+            double dist = Math.sin(Math.toRadians(bin.getLocation().getX()))
                     * Math.sin(Math.toRadians(latitude))
-                    + Math.cos(Math.toRadians(bin.getLatitude()))
+                    + Math.cos(Math.toRadians(bin.getLocation().getX()))
                     * Math.cos(Math.toRadians(latitude))
                     * Math.cos(Math.toRadians(theta));
             dist = Math.acos(dist);

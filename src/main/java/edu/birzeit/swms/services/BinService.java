@@ -3,6 +3,8 @@ package edu.birzeit.swms.services;
 import edu.birzeit.swms.dtos.BinDto;
 import edu.birzeit.swms.enums.Status;
 
+import java.awt.Point;
+
 import java.util.List;
 
 public interface BinService {
@@ -21,7 +23,7 @@ public interface BinService {
 
     List<BinDto> findByStatus(Status status);
 
-    List<BinDto> findByLocation(double latitude, double longitude, int n);
+    List<BinDto> findByLocation(Point location, int n);
 
 
 }
