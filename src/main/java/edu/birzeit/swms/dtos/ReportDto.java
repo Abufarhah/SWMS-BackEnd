@@ -1,5 +1,6 @@
 package edu.birzeit.swms.dtos;
 
+import edu.birzeit.swms.models.User;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,6 +15,7 @@ public class ReportDto {
     private int id;
     private String subject;
     private String body;
+    private String sentBy;
     private int binId;
 
 }

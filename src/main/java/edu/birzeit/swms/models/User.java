@@ -22,6 +22,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = "username", name = "uniqueNameConstraint")}
+)
 public class User implements UserDetails {
 
     @Id
