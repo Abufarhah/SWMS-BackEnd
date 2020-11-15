@@ -1,12 +1,12 @@
 package edu.birzeit.swms.controllers;
 
 import edu.birzeit.swms.dtos.BinDto;
+import edu.birzeit.swms.dtos.PointDto;
 import edu.birzeit.swms.enums.Status;
 import edu.birzeit.swms.services.BinService;
 import io.swagger.annotations.*;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
-import java.awt.Point;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +31,7 @@ public class BinController {
     @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
     public List<BinDto> getBins(
             @ApiParam(value = "Filter the list in terms of status") @Nullable @RequestParam Status status,
-            @ApiParam(value = "Get the closest n bins to the passed location") @Nullable @RequestParam Point location,
+            @ApiParam(value = "Get the closest n bins to the passed location") @Nullable @RequestParam PointDto location,
             @ApiParam(value = "Get the closest n bins to the passed location", example = "5") @Nullable @RequestParam Integer n) {
         if (location != null && n != null) {
             return binService.findByLocation(location, n);

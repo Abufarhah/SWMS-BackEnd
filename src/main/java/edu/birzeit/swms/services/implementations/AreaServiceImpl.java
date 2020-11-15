@@ -20,6 +20,7 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,7 +72,10 @@ public class AreaServiceImpl implements AreaService {
     public AreaDto updateArea(AreaDto areaDto, int id) {
         Area area = areaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Area", "id", id));
         area.setName(areaDto.getName());
-        area.setPolygon(areaDto.getPolygon());
+        Polygon polygon = new Polygon();
+        areaDto.getPolygonDto().getPointDtoList().forEach(point ->
+                polygon.addPoint((int) (point.getX()*Math.pow(10,7)), (int) (point.getY()*Math.pow(10,7))));
+        area.setPolygon(polygon);
         Area savedArea = areaRepository.save(area);
         AreaDto savedAreaDto = areaMapper.areaToDto(savedArea);
         return savedAreaDto;

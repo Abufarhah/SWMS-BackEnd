@@ -5,8 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.awt.*;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,7 +15,7 @@ public class AreaDto {
     @ApiModelProperty(notes = "defines the name of the area", required = true)
     private String name;
     @ApiModelProperty(notes = "defines the ploygon cavered by the area", required = true)
-    private Polygon polygon;
+    private PolygonDto polygonDto;
 
 
 }

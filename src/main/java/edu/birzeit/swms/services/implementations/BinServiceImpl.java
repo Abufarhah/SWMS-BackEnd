@@ -1,6 +1,7 @@
 package edu.birzeit.swms.services.implementations;
 
 import edu.birzeit.swms.dtos.BinDto;
+import edu.birzeit.swms.dtos.PointDto;
 import edu.birzeit.swms.enums.Status;
 import edu.birzeit.swms.exceptions.ResourceNotFoundException;
 import edu.birzeit.swms.mappers.BinMapper;
@@ -13,7 +14,7 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
+import java.awt.Point;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -59,11 +60,16 @@ public class BinServiceImpl implements BinService {
         Area area = null;
         List<Area> areaList = new ArrayList<>();
         areaRepository.findAll().forEach(a -> areaList.add(a));
+        boolean flag=false;
         for (Area a : areaList) {
-            if (a.getPolygon().contains(binDto.getLocation())) {
+            if (a.getPolygon().contains(binDto.getLocation().getX()*Math.pow(10,7), binDto.getLocation().getY()*Math.pow(10,7))) {
                 area = a;
+                flag=true;
                 break;
             }
+        }
+        if(!flag){
+            throw new IllegalStateException("Bin doesn't belong to any area");
         }
         bin.setArea(area);
         Bin savedBin = binRepository.save(bin);
@@ -75,13 +81,15 @@ public class BinServiceImpl implements BinService {
     public BinDto updateBin(BinDto binDto, int id) {
         Bin bin = binRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Bin", "id", id));
-        bin.setLocation(binDto.getLocation());
+        Point point = new Point();
+        point.setLocation(binDto.getLocation().getX(), binDto.getLocation().getY());
+        bin.setLocation(point);
         if (!bin.getLocation().equals(binDto.getLocation())) {
             Area area = null;
             List<Area> areaList = new ArrayList<>();
             areaRepository.findAll().forEach(a -> areaList.add(a));
             for (Area a : areaList) {
-                if (a.getPolygon().contains(binDto.getLocation())) {
+                if (a.getPolygon().contains(bin.getLocation())) {
                     area = a;
                     break;
                 }
@@ -95,11 +103,11 @@ public class BinServiceImpl implements BinService {
 
     @Override
     public void deleteBin(int id) {
-        if (binRepository.existsById(id)) {
-            binRepository.deleteById(id);
-        } else {
-            throw new ResourceNotFoundException("Bin", "id", id);
-        }
+        Bin bin = binRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Bin", "id", id)
+        );
+        bin.getReportList().forEach(report -> report.setBin(null));
+        binRepository.deleteById(id);
     }
 
     @Override
@@ -121,7 +129,7 @@ public class BinServiceImpl implements BinService {
     }
 
     @Override
-    public List<BinDto> findByLocation(Point location, int n) {
+    public List<BinDto> findByLocation(PointDto location, int n) {
         PriorityQueue<Bin> priorityQueue = new PriorityQueue<>(
                 Comparator.comparingDouble(o -> getDistance(o, location.getX(), location.getY())));
         binRepository.findAll().forEach(bin -> priorityQueue.add(bin));

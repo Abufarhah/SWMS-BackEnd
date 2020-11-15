@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import java.awt.*;
 
 @Data
 @AllArgsConstructor
@@ -18,7 +17,7 @@ public class BinDto {
     @ApiModelProperty(notes = "The database generates bin ID")
     private int id;
     @ApiModelProperty(notes = "defines the location of the bin",required = true)
-    private Point location;
+    private PointDto location;
     @ApiModelProperty(notes = "defines the status of the bin in terms of fullness",required = true)
     @Enumerated(EnumType.STRING)
     private Status status;
