@@ -14,5 +14,6 @@ public class ReportDto {
     private int id;
     private String subject;
     private String body;
+    private int binId;
 
 }

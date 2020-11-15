@@ -10,6 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Setter
@@ -31,6 +32,10 @@ public class Bin {
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumn(name = "area_id")
     private Area area;
+
+    @ToString.Exclude
+    @OneToMany(mappedBy = "bin")
+    private List<Report> reportList;
 
     @CreatedBy
     @Column(nullable = false, updatable = false)
