@@ -12,7 +12,7 @@ public class AreaDto {
 
     @ApiModelProperty(notes = "The database generates area ID")
     private int id;
-    @ApiModelProperty(notes = "defines the name of the area")
+    @ApiModelProperty(notes = "defines the name of the area",required = true)
     private String name;
 
 }

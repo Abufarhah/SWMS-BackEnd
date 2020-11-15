@@ -14,12 +14,16 @@ public class EmployeeDto {
 
     @ApiModelProperty(notes = "The database generates employee ID")
     private int id;
+    @ApiModelProperty(required = true)
     private String firstName;
+    @ApiModelProperty(required = true)
     private String lastName;
-    @ApiModelProperty(example = "0599123456")
+    @ApiModelProperty(example = "0599123456",required = true)
     @Pattern(regexp="(^$|^05[0-9]{8})")
     private String phone;
+    @ApiModelProperty(required = true)
     private String address;
+    @ApiModelProperty(required = true)
     private String username;
 
 }
