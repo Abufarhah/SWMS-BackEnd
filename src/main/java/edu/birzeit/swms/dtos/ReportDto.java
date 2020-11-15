@@ -17,7 +17,7 @@ public class ReportDto {
     private String subject;
     @ApiModelProperty(required = true)
     private String body;
-    private String sentBy;
+    private int userId;
     @ApiModelProperty(required = true)
     private int binId;
 
