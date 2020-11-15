@@ -12,6 +12,7 @@ public class VehicleDto {
 
     @ApiModelProperty(notes = "The database generates vehicle ID")
     private int id;
+    @ApiModelProperty(required = true)
     private String number;
 
 }
