@@ -39,7 +39,11 @@ public class BinServiceImpl implements BinService {
         List<BinDto> binDtoList = new ArrayList<>();
         binRepository.findAll().forEach(bin -> {
             BinDto binDto = binMapper.binToDto(bin);
-            binDto.setAreaId(bin.getArea().getId());
+            if(bin.getArea()!=null) {
+                binDto.setAreaId(bin.getArea().getId());
+            }else{
+                binDto.setAreaId(0);
+            }
             binDtoList.add(binDto);
         });
         return binDtoList;
@@ -50,7 +54,11 @@ public class BinServiceImpl implements BinService {
         Bin bin = binRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Bin", "id", id));
         BinDto binDto = binMapper.binToDto(bin);
-        binDto.setAreaId(bin.getArea().getId());
+        if(bin.getArea()!=null) {
+            binDto.setAreaId(bin.getArea().getId());
+        }else{
+            binDto.setAreaId(0);
+        }
         return binDto;
     }
 
