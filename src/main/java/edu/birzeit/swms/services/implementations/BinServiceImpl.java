@@ -70,6 +70,8 @@ public class BinServiceImpl implements BinService {
         }
         if(flag){
             bin.setArea(area);
+        }else{
+            bin.setArea(null);
         }
         Bin savedBin = binRepository.save(bin);
         BinDto savedBinDto = binMapper.binToDto(savedBin);
