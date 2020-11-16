@@ -68,10 +68,9 @@ public class BinServiceImpl implements BinService {
                 break;
             }
         }
-        if(!flag){
-            throw new IllegalStateException("Bin doesn't belong to any area");
+        if(flag){
+            bin.setArea(area);
         }
-        bin.setArea(area);
         Bin savedBin = binRepository.save(bin);
         BinDto savedBinDto = binMapper.binToDto(savedBin);
         return savedBinDto;
