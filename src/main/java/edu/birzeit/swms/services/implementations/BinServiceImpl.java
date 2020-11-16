@@ -39,9 +39,9 @@ public class BinServiceImpl implements BinService {
         List<BinDto> binDtoList = new ArrayList<>();
         binRepository.findAll().forEach(bin -> {
             BinDto binDto = binMapper.binToDto(bin);
-            if(bin.getArea()!=null) {
+            if (bin.getArea() != null) {
                 binDto.setAreaId(bin.getArea().getId());
-            }else{
+            } else {
                 binDto.setAreaId(0);
             }
             binDtoList.add(binDto);
@@ -54,9 +54,9 @@ public class BinServiceImpl implements BinService {
         Bin bin = binRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Bin", "id", id));
         BinDto binDto = binMapper.binToDto(bin);
-        if(bin.getArea()!=null) {
+        if (bin.getArea() != null) {
             binDto.setAreaId(bin.getArea().getId());
-        }else{
+        } else {
             binDto.setAreaId(0);
         }
         return binDto;
@@ -68,17 +68,17 @@ public class BinServiceImpl implements BinService {
         Area area = null;
         List<Area> areaList = new ArrayList<>();
         areaRepository.findAll().forEach(a -> areaList.add(a));
-        boolean flag=false;
+        boolean flag = false;
         for (Area a : areaList) {
-            if (a.getPolygon().contains(binDto.getLocation().getX()*Math.pow(10,7), binDto.getLocation().getY()*Math.pow(10,7))) {
+            if (a.getPolygon().contains(binDto.getLocation().getX() * Math.pow(10, 7), binDto.getLocation().getY() * Math.pow(10, 7))) {
                 area = a;
-                flag=true;
+                flag = true;
                 break;
             }
         }
-        if(flag){
+        if (flag) {
             bin.setArea(area);
-        }else{
+        } else {
             bin.setArea(null);
         }
         Bin savedBin = binRepository.save(bin);
@@ -138,9 +138,9 @@ public class BinServiceImpl implements BinService {
     }
 
     @Override
-    public List<BinDto> findByLocation(PointDto location, int n) {
+    public List<BinDto> findByLocation(double latitude, double longitude, int n) {
         PriorityQueue<Bin> priorityQueue = new PriorityQueue<>(
-                Comparator.comparingDouble(o -> getDistance(o, location.getX(), location.getY())));
+                Comparator.comparingDouble(o -> getDistance(o, latitude, longitude)));
         binRepository.findAll().forEach(bin -> priorityQueue.add(bin));
         List<BinDto> nearestBins = new ArrayList<>();
         int count = n;

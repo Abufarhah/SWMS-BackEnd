@@ -31,10 +31,11 @@ public class BinController {
     @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
     public List<BinDto> getBins(
             @ApiParam(value = "Filter the list in terms of status") @Nullable @RequestParam Status status,
-            @ApiParam(value = "Get the closest n bins to the passed location") @Nullable @RequestParam PointDto location,
+            @ApiParam(value = "Get the closest n bins to the passed location",example = "31.9031238") @Nullable @RequestParam double latitude,
+            @ApiParam(value = "Get the closest n bins to the passed location",example = "35.1977626") @Nullable @RequestParam double longitude,
             @ApiParam(value = "Get the closest n bins to the passed location", example = "5") @Nullable @RequestParam Integer n) {
-        if (location != null && n != null) {
-            return binService.findByLocation(location, n);
+        if (latitude != 0 && longitude != 0 && n != null) {
+            return binService.findByLocation(latitude, longitude, n);
         } else if (status != null) {
             return binService.findByStatus(status);
         } else {
