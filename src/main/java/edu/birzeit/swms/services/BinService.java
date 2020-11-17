@@ -22,9 +22,6 @@ public interface BinService {
 
     BinDto updateBinStatus(Status status, int id);
 
-    List<BinDto> findByStatus(Status status);
-
-    List<BinDto> findByLocation(double latitude, double longitude, int n);
-
+    List<BinDto> findByLocationAndStatus(Double latitude, Double longitude, Integer n, Status status);
 
 }

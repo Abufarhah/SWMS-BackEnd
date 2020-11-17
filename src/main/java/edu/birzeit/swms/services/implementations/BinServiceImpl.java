@@ -1,7 +1,6 @@
 package edu.birzeit.swms.services.implementations;
 
 import edu.birzeit.swms.dtos.BinDto;
-import edu.birzeit.swms.dtos.PointDto;
 import edu.birzeit.swms.enums.Status;
 import edu.birzeit.swms.exceptions.ResourceNotFoundException;
 import edu.birzeit.swms.mappers.BinMapper;
@@ -14,8 +13,7 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.awt.Point;
-
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -129,26 +127,35 @@ public class BinServiceImpl implements BinService {
         return savedBinDto;
     }
 
-    @Override
-    public List<BinDto> findByStatus(Status status) {
+    public List<BinDto> findByLocationAndStatus(Double latitude, Double longitude, Integer n, Status status) {
         List<BinDto> binDtoList = new ArrayList<>();
-        binRepository.findByStatus(status).forEach(
-                bin -> binDtoList.add(binMapper.binToDto(bin)));
-        return binDtoList;
-    }
-
-    @Override
-    public List<BinDto> findByLocation(double latitude, double longitude, int n) {
-        PriorityQueue<Bin> priorityQueue = new PriorityQueue<>(
-                Comparator.comparingDouble(o -> getDistance(o, latitude, longitude)));
-        binRepository.findAll().forEach(bin -> priorityQueue.add(bin));
-        List<BinDto> nearestBins = new ArrayList<>();
-        int count = n;
-        while (count != 0 && priorityQueue.size() != 0) {
-            nearestBins.add(binMapper.binToDto(priorityQueue.remove()));
-            count--;
+        if (status == null && latitude == null & longitude == null && n == null) {
+            binRepository.findAll().forEach(
+                    bin -> binDtoList.add(binMapper.binToDto(bin)));
+        } else if (status != null && latitude == null & longitude == null && n == null) {
+            binRepository.findByStatus(status).forEach(
+                    bin -> binDtoList.add(binMapper.binToDto(bin)));
+            return binDtoList;
+        } else if (status == null) {
+            PriorityQueue<Bin> priorityQueue = new PriorityQueue<>(
+                    Comparator.comparingDouble(o -> getDistance(o, latitude, longitude)));
+            binRepository.findAll().forEach(bin -> priorityQueue.add(bin));
+            int count = n;
+            while (count != 0 && priorityQueue.size() != 0) {
+                binDtoList.add(binMapper.binToDto(priorityQueue.remove()));
+                count--;
+            }
+        } else {
+            PriorityQueue<Bin> priorityQueue = new PriorityQueue<>(
+                    Comparator.comparingDouble(o -> getDistance(o, latitude, longitude)));
+            binRepository.findAll().forEach(bin -> priorityQueue.add(bin));
+            int count = n;
+            while (count != 0 && priorityQueue.size() != 0) {
+                binDtoList.add(binMapper.binToDto(priorityQueue.remove()));
+                count--;
+            }
         }
-        return nearestBins;
+        return binDtoList;
     }
 
     private double getDistance(Bin bin, double latitude, double longitude) {

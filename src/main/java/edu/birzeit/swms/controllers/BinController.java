@@ -1,7 +1,6 @@
 package edu.birzeit.swms.controllers;
 
 import edu.birzeit.swms.dtos.BinDto;
-import edu.birzeit.swms.dtos.PointDto;
 import edu.birzeit.swms.enums.Status;
 import edu.birzeit.swms.services.BinService;
 import io.swagger.annotations.*;
@@ -31,16 +30,10 @@ public class BinController {
     @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
     public List<BinDto> getBins(
             @ApiParam(value = "Filter the list in terms of status") @Nullable @RequestParam Status status,
-            @ApiParam(value = "Get the closest n bins to the passed location",example = "31.9031238") @Nullable @RequestParam double latitude,
-            @ApiParam(value = "Get the closest n bins to the passed location",example = "35.1977626") @Nullable @RequestParam double longitude,
+            @ApiParam(value = "Get the closest n bins to the passed location", example = "31.9031238") @Nullable @RequestParam Double latitude,
+            @ApiParam(value = "Get the closest n bins to the passed location", example = "35.1977626") @Nullable @RequestParam Double longitude,
             @ApiParam(value = "Get the closest n bins to the passed location", example = "5") @Nullable @RequestParam Integer n) {
-        if (latitude != 0 && longitude != 0 && n != null) {
-            return binService.findByLocation(latitude, longitude, n);
-        } else if (status != null) {
-            return binService.findByStatus(status);
-        } else {
-            return binService.getBins();
-        }
+        return binService.findByLocationAndStatus(latitude, longitude, n, status);
     }
 
     @GetMapping("/{id}")
