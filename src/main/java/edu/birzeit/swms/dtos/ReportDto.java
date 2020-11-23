@@ -1,6 +1,5 @@
 package edu.birzeit.swms.dtos;
 
-import edu.birzeit.swms.models.User;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;

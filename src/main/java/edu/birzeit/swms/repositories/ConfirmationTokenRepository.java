@@ -1,7 +1,6 @@
 package edu.birzeit.swms.repositories;
 
 import edu.birzeit.swms.models.ConfirmationToken;
-import org.graalvm.compiler.nodes.calc.IntegerDivRemNode;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
