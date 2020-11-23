@@ -49,6 +49,7 @@ public class CitizenServiceImpl implements CitizenService {
         Citizen citizen = citizenMapper.dtoToCitizen(citizenDto);
         citizen.setRole(UserRole.CITIZEN);
         citizen.setPassword(passwordEncoder.encode("swms" + citizen.getUsername()));
+        citizen.setEnabled(true);
         Citizen savedCitizen = citizenRepository.save(citizen);
         CitizenDto savedCitizenDto = citizenMapper.citizenToDto(savedCitizen);
         return savedCitizenDto;
@@ -62,6 +63,7 @@ public class CitizenServiceImpl implements CitizenService {
         citizen.setPhone(citizenDto.getPhone());
         citizen.setAddress(citizenDto.getAddress());
         citizen.setRole(UserRole.CITIZEN);
+        citizen.setEnabled(true);
         Citizen savedCitizen = citizenRepository.save(citizen);
         CitizenDto savedCitizenDto = citizenMapper.citizenToDto(savedCitizen);
         return savedCitizenDto;

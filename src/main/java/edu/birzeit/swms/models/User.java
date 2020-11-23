@@ -23,7 +23,7 @@ import java.util.List;
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = "username", name = "uniqueNameConstraint")}
+        @UniqueConstraint(columnNames = "email", name = "uniqueNameConstraint")}
 )
 public class User implements UserDetails {
 
@@ -34,14 +34,18 @@ public class User implements UserDetails {
     private String lastName;
     private String phone;
     private String address;
-    private String username;
+    private String email;
     private String password;
     @Enumerated(EnumType.STRING)
     private UserRole role;
+    private boolean enabled;
 
     @ToString.Exclude
     @OneToMany(mappedBy = "from")
     private List<Report> reportList;
+
+    @OneToOne(mappedBy = "user")
+    ConfirmationToken confirmationToken;
 
     @CreatedBy
     @Column(nullable = false, updatable = false)
@@ -65,6 +69,11 @@ public class User implements UserDetails {
     }
 
     @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
     public boolean isAccountNonExpired() {
         return true;
     }
@@ -81,6 +90,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 }

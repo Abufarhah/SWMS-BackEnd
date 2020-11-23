@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
         @ApiResponse(code = 200, message = "Successfully authenticated"),
         @ApiResponse(code = 403, message = "Invalid Username or Password")
 })
-public class FackeLoginController {
+public class FakeLoginController {
 
     @ApiOperation("Login")
     @PostMapping("/login")

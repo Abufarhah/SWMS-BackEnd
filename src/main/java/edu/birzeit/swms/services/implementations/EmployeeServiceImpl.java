@@ -1,13 +1,11 @@
 package edu.birzeit.swms.services.implementations;
 
 import edu.birzeit.swms.dtos.AreaDto;
-import edu.birzeit.swms.dtos.BinDto;
 import edu.birzeit.swms.dtos.EmployeeDto;
 import edu.birzeit.swms.enums.UserRole;
 import edu.birzeit.swms.exceptions.ResourceNotFoundException;
 import edu.birzeit.swms.mappers.AreaMapper;
 import edu.birzeit.swms.mappers.EmployeeMapper;
-import edu.birzeit.swms.models.Area;
 import edu.birzeit.swms.models.Employee;
 import edu.birzeit.swms.repositories.EmployeeRepository;
 import edu.birzeit.swms.services.EmployeeService;
@@ -54,6 +52,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = employeeMapper.dtoToEmployee(employeeDto);
         employee.setRole(UserRole.EMPLOYEE);
         employee.setPassword(passwordEncoder.encode("swms"+employee.getUsername()));
+        employee.setEnabled(true);
         Employee savedEmployee = employeeRepository.save(employee);
         EmployeeDto savedEmployeeDto = employeeMapper.employeeToDto(savedEmployee);
         return savedEmployeeDto;
@@ -67,7 +66,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setPhone(employeeDto.getPhone());
         employee.setAddress(employeeDto.getAddress());
         employee.setRole(UserRole.EMPLOYEE);
-
+        employee.setEnabled(true);
         Employee savedEmployee = employeeRepository.save(employee);
         EmployeeDto savedEmployeeDto = employeeMapper.employeeToDto(savedEmployee);
         return savedEmployeeDto;

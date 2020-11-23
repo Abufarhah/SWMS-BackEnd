@@ -75,10 +75,10 @@ public class ReportServiceImpl implements ReportService {
                     () -> new ResourceNotFoundException("Bin", "id", reportDto.getBinId())));
         }
         String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-        if(username.equals(Constants.ADMIN_USERNAME)){
+        if(username.equals(Constants.ADMIN_EMAIL)){
             report.setFrom(admin);
         }else {
-            report.setFrom(userRepository.findByUsername(username).orElseThrow(
+            report.setFrom(userRepository.findByEmail(username).orElseThrow(
                     () -> new ResourceNotFoundException("User", "username", username)));
         }
         Report savedReport = reportRepository.save(report);
