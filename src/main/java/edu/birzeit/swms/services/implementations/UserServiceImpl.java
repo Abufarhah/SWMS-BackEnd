@@ -115,7 +115,7 @@ public class UserServiceImpl implements UserService {
 
         final SMS sms = new SMS();
         sms.setTo(userMail);
-        sms.setMessage("Thank you for registering in SWMS. Please click on the below link to activate your account." + "http://swms.ga/api/v1/sign-up/confirm?token="
+        sms.setMessage("Thank you for registering in SWMS. Please click on the below link to activate your account." + "http://swms.ga/api/v1/confirm?token="
                 + token);
         smsService.send(sms);
     }

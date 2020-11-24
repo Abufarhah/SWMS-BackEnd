@@ -21,6 +21,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-log4j2'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation group: "com.twilio.sdk", name: "twilio", version : "7.47.2"
     runtimeOnly 'mysql:mysql-connector-java'
     compileOnly 'org.projectlombok:lombok:1.18.8'

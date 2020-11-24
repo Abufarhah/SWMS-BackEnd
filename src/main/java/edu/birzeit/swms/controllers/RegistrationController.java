@@ -33,13 +33,9 @@ public class RegistrationController {
     }
 
     @GetMapping("/sign-up/confirm")
-    public ResponseEntity signUp(@RequestHeader(value="User-Agent") String userAgent,@RequestParam String token) {
-        if(userAgent.contains("Mozilla")) {
-            userService.confirmUser(token);
-            return new ResponseEntity("Your account activated successfully", HttpStatus.OK);
-        }else {
-            return new ResponseEntity("Your browser doesn't support this activation link",HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity signUp(@RequestParam String token) {
+        userService.confirmUser(token);
+        return new ResponseEntity("Your account activated successfully", HttpStatus.OK);
     }
 
 }
