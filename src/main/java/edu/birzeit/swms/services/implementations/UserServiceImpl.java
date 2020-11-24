@@ -7,12 +7,14 @@ import edu.birzeit.swms.exceptions.DatabaseException;
 import edu.birzeit.swms.mappers.UserMapper;
 import edu.birzeit.swms.models.Citizen;
 import edu.birzeit.swms.models.ConfirmationToken;
+import edu.birzeit.swms.models.SMS;
 import edu.birzeit.swms.models.User;
 import edu.birzeit.swms.repositories.CitizenRepository;
 import edu.birzeit.swms.repositories.ConfirmationTokenRepository;
 import edu.birzeit.swms.repositories.UserRepository;
 import edu.birzeit.swms.services.ConfirmationTokenService;
 import edu.birzeit.swms.services.EmailSenderService;
+import edu.birzeit.swms.services.SMSService;
 import edu.birzeit.swms.services.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +45,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     EmailSenderService emailSenderService;
+
+    @Autowired
+    SMSService smsService;
 
     @Autowired
     UserMapper userMapper;
@@ -92,20 +97,27 @@ public class UserServiceImpl implements UserService {
 
         final ConfirmationToken confirmationToken = new ConfirmationToken(createdUser);
         confirmationTokenService.saveConfirmationToken(confirmationToken);
-        sendConfirmationMail(createdUser.getEmail(), confirmationToken.getConfirmationToken());
+//        sendConfirmationMail(createdUser.getEmail(), confirmationToken.getConfirmationToken());
+        sendConfirmationMail(createdUser.getPhone(), confirmationToken.getConfirmationToken());
     }
 
     public void sendConfirmationMail(String userMail, String token) {
 
-        final SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(userMail);
-        mailMessage.setSubject("Mail Confirmation Link!");
-        mailMessage.setFrom("layth@assert.ps");
-        mailMessage.setText(
-                "Thank you for registering in SWMS. Please click on the below link to activate your account." + "http://swms.ga/api/v1/sign-up/confirm?token="
-                        + token);
+//        final SimpleMailMessage mailMessage = new SimpleMailMessage();
+//        mailMessage.setTo(userMail);
+//        mailMessage.setSubject("Mail Confirmation Link!");
+//        mailMessage.setFrom("layth@assert.ps");
+//        mailMessage.setText(
+//                "Thank you for registering in SWMS. Please click on the below link to activate your account." + "http://swms.ga/api/v1/sign-up/confirm?token="
+//                        + token);
+//
+//        emailSenderService.sendEmail(mailMessage);
 
-        emailSenderService.sendEmail(mailMessage);
+        final SMS sms = new SMS();
+        sms.setTo(userMail);
+        sms.setMessage("Thank you for registering in SWMS. Please click on the below link to activate your account." + "http://swms.ga/api/v1/sign-up/confirm?token="
+                + token);
+        smsService.send(sms);
     }
 
     public void confirmUser(String token) {

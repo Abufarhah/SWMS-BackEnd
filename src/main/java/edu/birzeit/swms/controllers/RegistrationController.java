@@ -8,6 +8,8 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Log
@@ -25,13 +27,19 @@ public class RegistrationController {
     UserService userService;
 
     @PostMapping("/sign-up")
-    public void signUp(@RequestBody UserDto userDto) {
+    public ResponseEntity signUp(@RequestBody UserDto userDto) {
         userService.signUpUser(userDto);
+        return new ResponseEntity("You are signed up successfully!\nActivation link sent to you email", HttpStatus.OK);
     }
 
     @GetMapping("/sign-up/confirm")
-    public void signUp(@RequestParam String token) {
-        userService.confirmUser(token);
+    public ResponseEntity signUp(@RequestHeader(value="User-Agent") String userAgent,@RequestParam String token) {
+        if(userAgent.contains("Mozilla")) {
+            userService.confirmUser(token);
+            return new ResponseEntity("Your account activated successfully", HttpStatus.OK);
+        }else {
+            return new ResponseEntity("Your browser doesn't support this activation link",HttpStatus.BAD_REQUEST);
+        }
     }
 
 }
