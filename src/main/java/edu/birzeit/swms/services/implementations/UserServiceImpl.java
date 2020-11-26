@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService {
         citizen.setLastName(user.getLastName());
         citizen.setAddress(user.getAddress());
         citizen.setPhone(user.getPhone());
-        citizen.setEnabled(false);
+        citizen.setEnabled(true);
         citizen.setRole(UserRole.CITIZEN);
         citizen.setPassword(encryptedPassword);
         final Citizen createdUser = citizenRepository.save(citizen);
@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService {
         final ConfirmationToken confirmationToken = new ConfirmationToken(createdUser);
         confirmationTokenService.saveConfirmationToken(confirmationToken);
 //        sendConfirmationMail(createdUser.getEmail(), confirmationToken.getConfirmationToken());
-        sendConfirmationMail(createdUser.getPhone(), confirmationToken.getConfirmationToken());
+//        sendConfirmationMail(createdUser.getPhone(), confirmationToken.getConfirmationToken());
     }
 
     public void sendConfirmationMail(String userMail, String token) {
