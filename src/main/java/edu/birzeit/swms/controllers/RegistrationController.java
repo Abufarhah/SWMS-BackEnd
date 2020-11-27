@@ -32,7 +32,7 @@ public class RegistrationController {
     @PostMapping("/sign-up")
     public ResponseEntity signUp(@RequestBody UserDto userDto) {
         userService.signUpUser(userDto);
-        return new ResponseEntity("You are signed up successfully!\nActivation link sent to you email", HttpStatus.OK);
+        return new ResponseEntity("You are signed up successfully!\nActivation link sent to you", HttpStatus.OK);
     }
 
     @GetMapping("/sign-up/confirm")
