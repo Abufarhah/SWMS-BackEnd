@@ -1,5 +1,6 @@
 package edu.birzeit.swms.dtos;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.birzeit.swms.enums.UserRole;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -27,6 +28,7 @@ public class UserDto {
     @ApiModelProperty(required = true)
     private String username;
     @ApiModelProperty(required = true)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     @ApiModelProperty(required = true)
     private UserRole role;
