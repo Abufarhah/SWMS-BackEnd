@@ -12,7 +12,7 @@ public class ConfirmationController {
     public String greeting(@RequestParam String token, Model model) {
 //        String response = "<html><head></head><body><a href=\"http://swms.ga/sign-up/confirm?token=" + token + "\"" +
 //                ">activate your account</a></body></html>";
-        model.addAttribute(token);
+        model.addAttribute("token",token);
         return "confirm";
 
     }
