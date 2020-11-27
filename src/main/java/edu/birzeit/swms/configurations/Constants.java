@@ -7,7 +7,7 @@ public interface Constants {
     String ADMIN_LASTNAME = "admin";
     String ADMIN_PHONE = "admin";
     String ADMIN_ADDRESS = "admin";
-    String ADMIN_EMAIL = "admin";
+    String ADMIN_USENAME = "admin";
     String ADMIN_PASSWORD = "admin";
 
 }

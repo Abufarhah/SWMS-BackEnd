@@ -24,6 +24,6 @@ public class CitizenDto {
     @ApiModelProperty(required = true)
     private String address;
     @ApiModelProperty(required = true)
-    private String email;
+    private String username;
 
 }

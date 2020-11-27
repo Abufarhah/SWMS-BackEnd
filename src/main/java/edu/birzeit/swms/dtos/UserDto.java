@@ -1,5 +1,6 @@
 package edu.birzeit.swms.dtos;
 
+import edu.birzeit.swms.enums.UserRole;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,7 +25,10 @@ public class UserDto {
     @ApiModelProperty(required = true)
     private String address;
     @ApiModelProperty(required = true)
-    private String email;
+    private String username;
     @ApiModelProperty(required = true)
     private String password;
+    @ApiModelProperty(required = true)
+    private UserRole role;
+
 }

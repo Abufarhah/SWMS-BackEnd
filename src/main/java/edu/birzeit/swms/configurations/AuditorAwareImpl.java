@@ -10,14 +10,14 @@ public class AuditorAwareImpl implements AuditorAware<String> {
 
     @Override
     public Optional<String> getCurrentAuditor() {
-        String email;
+        String username;
         try {
             Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            email = principal.toString();
+            username = principal.toString();
         } catch (Exception e) {
             return Optional.of("signing up");
         }
-        return Optional.of(email);
+        return Optional.of(username);
     }
 
 }

@@ -2,7 +2,6 @@ package edu.birzeit.swms.services.implementations;
 
 import edu.birzeit.swms.configurations.Constants;
 import edu.birzeit.swms.dtos.ReportDto;
-import edu.birzeit.swms.enums.UserRole;
 import edu.birzeit.swms.exceptions.ResourceNotFoundException;
 import edu.birzeit.swms.mappers.ReportMapper;
 import edu.birzeit.swms.models.Report;
@@ -14,14 +13,11 @@ import edu.birzeit.swms.services.ReportService;
 import edu.birzeit.swms.utils.SWMSUtil;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 @Log
 @Service
@@ -75,10 +71,10 @@ public class ReportServiceImpl implements ReportService {
                     () -> new ResourceNotFoundException("Bin", "id", reportDto.getBinId())));
         }
         String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-        if(username.equals(Constants.ADMIN_EMAIL)){
+        if(username.equals(Constants.ADMIN_USENAME)){
             report.setFrom(admin);
         }else {
-            report.setFrom(userRepository.findByEmail(username).orElseThrow(
+            report.setFrom(userRepository.findByUsername(username).orElseThrow(
                     () -> new ResourceNotFoundException("User", "username", username)));
         }
         Report savedReport = reportRepository.save(report);

@@ -10,7 +10,10 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @Log
 @RestController
@@ -36,6 +39,11 @@ public class RegistrationController {
     public ResponseEntity signUp(@RequestParam String token) {
         userService.confirmUser(token);
         return new ResponseEntity("Your account activated successfully", HttpStatus.OK);
+    }
+
+    @GetMapping("/user")
+    public UserDto getUser() {
+        return userService.getUser();
     }
 
 }

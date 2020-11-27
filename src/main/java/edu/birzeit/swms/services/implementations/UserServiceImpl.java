@@ -18,7 +18,7 @@ import edu.birzeit.swms.services.SMSService;
 import edu.birzeit.swms.services.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -59,11 +59,11 @@ public class UserServiceImpl implements UserService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         try {
             log.info("loadUserByUsername --- loading user username to authenticate");
-            if (username.equals(Constants.ADMIN_EMAIL)) {
+            if (username.equals(Constants.ADMIN_USENAME)) {
                 log.warn("loadUserByUsername --- trying to login as an administrator");
                 return admin;
             } else {
-                User user = userRepository.findByEmail(username).orElseThrow(() -> {
+                User user = userRepository.findByUsername(username).orElseThrow(() -> {
                     log.error(String.format("loadUserByUsername --- user with username: '%s' not found", username));
                     return new UsernameNotFoundException(String.format("User with username: '%s' not found", username));
                 });
@@ -85,12 +85,12 @@ public class UserServiceImpl implements UserService {
         final String encryptedPassword = passwordEncoder.encode(user.getPassword());
 
         Citizen citizen = new Citizen();
-        citizen.setEmail(user.getEmail());
+        citizen.setUsername(user.getUsername());
         citizen.setFirstName(user.getFirstName());
         citizen.setLastName(user.getLastName());
         citizen.setAddress(user.getAddress());
         citizen.setPhone(user.getPhone());
-        citizen.setEnabled(true);
+        citizen.setEnabled(false);
         citizen.setRole(UserRole.CITIZEN);
         citizen.setPassword(encryptedPassword);
         final Citizen createdUser = citizenRepository.save(citizen);
@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService {
         final ConfirmationToken confirmationToken = new ConfirmationToken(createdUser);
         confirmationTokenService.saveConfirmationToken(confirmationToken);
 //        sendConfirmationMail(createdUser.getEmail(), confirmationToken.getConfirmationToken());
-//        sendConfirmationMail(createdUser.getPhone(), confirmationToken.getConfirmationToken());
+        sendConfirmationMail(createdUser.getPhone(), confirmationToken.getConfirmationToken());
     }
 
     public void sendConfirmationMail(String userMail, String token) {
@@ -134,5 +134,21 @@ public class UserServiceImpl implements UserService {
         confirmationTokenService.deleteConfirmationToken(confirmationToken.getId());
 
     }
+
+    public UserDto getUser(){
+        String username;
+        try {
+            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            username = principal.toString();
+        } catch (Exception e) {
+            throw new IllegalStateException("you are not logged in user");
+        }
+        User user=userRepository.findByUsername(username).orElseThrow(() ->
+            new IllegalStateException("User Not Found")
+        );
+        UserDto userDto= userMapper.userToDto(user);
+        return userDto;
+    }
+
 
 }

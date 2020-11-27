@@ -17,4 +17,6 @@ public interface UserService extends UserDetailsService {
 
     void confirmUser(String token);
 
+    UserDto getUser();
+
 }

@@ -13,16 +13,16 @@ import org.springframework.util.MultiValueMap;
 @Service
 public class SMSServiceImpl implements SMSService {
 
-    private String twilioAccountSID="AC980062100b28b9f21f0fa45d3d436602";
+    private String twilioAccountSID="ACce17252e794a9a9bc8b1d0b35676a517";
 
-    private String twilioAuthToken="46fb842f6c3b06e87debeba8ad685c5c";
+    private String twilioAuthToken="b04d8801c5345127579cde5c2f21a54c";
 
-    private String twilioPhoneNumber="+12056515403";
+    private String twilioPhoneNumber="+12312725350";
 
     public void send(SMS sms) {
         Twilio.init(twilioAccountSID, twilioAuthToken);
 
-        Message message = Message.creator(new PhoneNumber(sms.getTo()), new PhoneNumber(twilioPhoneNumber), sms.getMessage())
+        Message message = Message.creator(new PhoneNumber("+970597035694"), new PhoneNumber(twilioPhoneNumber), sms.getMessage())
                 .create();
         System.out.println("here is my id:" + message.getSid());// Unique resource ID created to manage this transaction
 

@@ -23,7 +23,7 @@ import java.util.List;
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = "email", name = "uniqueNameConstraint")}
+        @UniqueConstraint(columnNames = "username", name = "uniqueNameConstraint")}
 )
 public class User implements UserDetails {
 
@@ -34,7 +34,7 @@ public class User implements UserDetails {
     private String lastName;
     private String phone;
     private String address;
-    private String email;
+    private String username;
     private String password;
     @Enumerated(EnumType.STRING)
     private UserRole role;
@@ -70,7 +70,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return username;
     }
 
     @Override
