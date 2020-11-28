@@ -1,5 +1,6 @@
 package edu.birzeit.swms.handlers;
 
+import edu.birzeit.swms.exceptions.CustomException;
 import edu.birzeit.swms.exceptions.ResourceAssignedException;
 import edu.birzeit.swms.exceptions.ResourceNotAssignedException;
 import edu.birzeit.swms.exceptions.ResourceNotFoundException;
@@ -43,8 +44,17 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(apiException, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(value = {Exception.class})
+    @ExceptionHandler(value = {CustomException.class})
+    public ResponseEntity<Object> handleCustomException(CustomException customException){
+        ApiException apiException=new ApiException(
+                customException.getMessage(),
+                customException.getHttpStatus(),
+                ZonedDateTime.now()
+        );
+        return new ResponseEntity<>(apiException,customException.getHttpStatus());
+    }
 
+    @ExceptionHandler(value = {Exception.class})
     public ResponseEntity<Object> handleException(Exception exception){
         ApiException apiException=new ApiException(
                 exception.getMessage(),
@@ -53,4 +63,5 @@ public class ApiExceptionHandler {
         );
         return new ResponseEntity<>(apiException,HttpStatus.BAD_REQUEST);
     }
+
 }

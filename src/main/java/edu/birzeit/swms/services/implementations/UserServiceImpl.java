@@ -3,6 +3,7 @@ package edu.birzeit.swms.services.implementations;
 import edu.birzeit.swms.configurations.Constants;
 import edu.birzeit.swms.dtos.UserDto;
 import edu.birzeit.swms.enums.UserRole;
+import edu.birzeit.swms.exceptions.CustomException;
 import edu.birzeit.swms.exceptions.DatabaseException;
 import edu.birzeit.swms.mappers.UserMapper;
 import edu.birzeit.swms.models.Citizen;
@@ -18,6 +19,7 @@ import edu.birzeit.swms.services.SMSService;
 import edu.birzeit.swms.services.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -79,11 +81,8 @@ public class UserServiceImpl implements UserService {
     }
 
     public void signUpUser(UserDto userDto) {
-
         User user = userMapper.dtoToUser(userDto);
-
         final String encryptedPassword = passwordEncoder.encode(user.getPassword());
-
         Citizen citizen = new Citizen();
         citizen.setUsername(user.getUsername());
         citizen.setFirstName(user.getFirstName());
@@ -94,7 +93,6 @@ public class UserServiceImpl implements UserService {
         citizen.setRole(UserRole.CITIZEN);
         citizen.setPassword(encryptedPassword);
         final Citizen createdUser = citizenRepository.save(citizen);
-
         final ConfirmationToken confirmationToken = new ConfirmationToken(createdUser);
         confirmationTokenService.saveConfirmationToken(confirmationToken);
 //        sendConfirmationMail(createdUser.getEmail(), confirmationToken.getConfirmationToken());
@@ -102,7 +100,6 @@ public class UserServiceImpl implements UserService {
     }
 
     public void sendConfirmationMail(String userMail, String token) {
-
 //        final SimpleMailMessage mailMessage = new SimpleMailMessage();
 //        mailMessage.setTo(userMail);
 //        mailMessage.setSubject("Mail Confirmation Link!");
@@ -112,7 +109,6 @@ public class UserServiceImpl implements UserService {
 //                        + token);
 //
 //        emailSenderService.sendEmail(mailMessage);
-
         final SMS sms = new SMS();
         sms.setTo(userMail);
         sms.setMessage("Thank you for registering in SWMS. Please click on the below link to activate your account." + "http://swms.ga/api/v1/confirm?token="
@@ -121,32 +117,31 @@ public class UserServiceImpl implements UserService {
     }
 
     public void confirmUser(String token) {
-
         ConfirmationToken confirmationToken = confirmationTokenRepository.findAllByConfirmationToken(token).orElseThrow(() ->
                 new IllegalArgumentException("token not valid")
         );
-        final User user = confirmationToken.getUser();
-
-        user.setEnabled(true);
-
-        userRepository.save(user);
-
-        confirmationTokenService.deleteConfirmationToken(confirmationToken.getId());
-
+        try {
+            final User user = confirmationToken.getUser();
+            user.setEnabled(true);
+            userRepository.save(user);
+            confirmationTokenService.deleteConfirmationToken(confirmationToken.getId());
+        } catch (Exception e) {
+            throw new CustomException("Error while accesing user informtion", HttpStatus.SERVICE_UNAVAILABLE);
+        }
     }
 
-    public UserDto getUser(){
+    public UserDto getUser() {
         String username;
         try {
             Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             username = principal.toString();
         } catch (Exception e) {
-            throw new IllegalStateException("you are not logged in user");
+            throw new CustomException("you are not logged in user", HttpStatus.UNAUTHORIZED);
         }
-        User user=userRepository.findByUsername(username).orElseThrow(() ->
-            new IllegalStateException("User Not Found")
+        User user = userRepository.findByUsername(username).orElseThrow(() ->
+                new CustomException("User Not Found", HttpStatus.NOT_FOUND)
         );
-        UserDto userDto= userMapper.userToDto(user);
+        UserDto userDto = userMapper.userToDto(user);
         return userDto;
     }
 
