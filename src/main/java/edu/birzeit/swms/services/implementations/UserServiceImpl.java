@@ -17,6 +17,7 @@ import edu.birzeit.swms.services.ConfirmationTokenService;
 import edu.birzeit.swms.services.EmailSenderService;
 import edu.birzeit.swms.services.SMSService;
 import edu.birzeit.swms.services.UserService;
+import edu.birzeit.swms.utils.SWMSUtil;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -57,11 +58,14 @@ public class UserServiceImpl implements UserService {
     @Autowired
     User admin;
 
+    @Autowired
+    SWMSUtil util;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         try {
             log.info("loadUserByUsername --- loading user username to authenticate");
-            if (username.equals(Constants.ADMIN_USENAME)) {
+            if (username.equals(Constants.ADMIN_USERNAME)) {
                 log.warn("loadUserByUsername --- trying to login as an administrator");
                 return admin;
             } else {
@@ -126,24 +130,13 @@ public class UserServiceImpl implements UserService {
             userRepository.save(user);
             confirmationTokenService.deleteConfirmationToken(confirmationToken.getId());
         } catch (Exception e) {
-            throw new CustomException("Error while accesing user informtion", HttpStatus.SERVICE_UNAVAILABLE);
+            throw new CustomException("Error while accessing user information", HttpStatus.SERVICE_UNAVAILABLE);
         }
     }
 
     public UserDto getUser() {
-        String username;
-        try {
-            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            username = principal.toString();
-        } catch (Exception e) {
-            throw new CustomException("you are not logged in user", HttpStatus.UNAUTHORIZED);
-        }
-        User user = userRepository.findByUsername(username).orElseThrow(() ->
-                new CustomException("User Not Found", HttpStatus.NOT_FOUND)
-        );
-        UserDto userDto = userMapper.userToDto(user);
+        UserDto userDto = userMapper.userToDto(util.getLoggedInUser());
         return userDto;
     }
-
 
 }

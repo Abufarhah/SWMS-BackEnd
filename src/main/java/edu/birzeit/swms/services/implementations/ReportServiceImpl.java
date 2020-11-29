@@ -1,7 +1,7 @@
 package edu.birzeit.swms.services.implementations;
 
-import edu.birzeit.swms.configurations.Constants;
 import edu.birzeit.swms.dtos.ReportDto;
+import edu.birzeit.swms.exceptions.CustomException;
 import edu.birzeit.swms.exceptions.ResourceNotFoundException;
 import edu.birzeit.swms.mappers.ReportMapper;
 import edu.birzeit.swms.models.Report;
@@ -13,11 +13,14 @@ import edu.birzeit.swms.services.ReportService;
 import edu.birzeit.swms.utils.SWMSUtil;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static edu.birzeit.swms.configurations.Constants.ADMIN_USERNAME;
 
 @Log
 @Service
@@ -50,6 +53,11 @@ public class ReportServiceImpl implements ReportService {
             reportDto.setUserId(report.getFrom().getId());
             reportDtoList.add(reportDto);
         });
+        User user = util.getLoggedInUser();
+        if (!user.getUsername().equals(ADMIN_USERNAME)) {
+            return reportDtoList.stream().filter(reportDto ->
+                    reportDto.getUserId() == user.getId()).collect(Collectors.toList());
+        }
         return reportDtoList;
     }
 
@@ -70,13 +78,8 @@ public class ReportServiceImpl implements ReportService {
             report.setBin(binRepository.findById(reportDto.getBinId()).orElseThrow(
                     () -> new ResourceNotFoundException("Bin", "id", reportDto.getBinId())));
         }
-        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-        if(username.equals(Constants.ADMIN_USENAME)){
-            report.setFrom(admin);
-        }else {
-            report.setFrom(userRepository.findByUsername(username).orElseThrow(
-                    () -> new ResourceNotFoundException("User", "username", username)));
-        }
+        User user = util.getLoggedInUser();
+        report.setFrom(user);
         Report savedReport = reportRepository.save(report);
         ReportDto savedReportDto = reportMapper.reportToDto(savedReport);
         return savedReportDto;
@@ -86,8 +89,8 @@ public class ReportServiceImpl implements ReportService {
     public ReportDto updateReport(ReportDto reportDto, int id) {
         Report report = reportRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Report", "id", id));
-        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-        if (username.equals(report.getFrom().getUsername()) || util.isAdmin()) {
+        User user = util.getLoggedInUser();
+        if (user.getUsername().equals(report.getFrom().getUsername())) {
             report.setSubject(reportDto.getSubject());
             report.setBody(reportDto.getBody());
             if (reportDto.getBinId() != 0) {
@@ -98,7 +101,7 @@ public class ReportServiceImpl implements ReportService {
             ReportDto savedReportDto = reportMapper.reportToDto(savedReport);
             return savedReportDto;
         } else {
-            throw new IllegalStateException("you are not authorized to update this repport");
+            throw new CustomException("you are not authorized to update this report", HttpStatus.UNAUTHORIZED);
         }
     }
 
@@ -106,11 +109,11 @@ public class ReportServiceImpl implements ReportService {
     public void deleteReport(int id) {
         Report report = reportRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Report", "id", id));
-        String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-        if (username.equals(report.getFrom().getUsername()) || util.isAdmin()) {
+        User user = util.getLoggedInUser();
+        if (user.getUsername().equals(report.getFrom().getUsername()) || util.isAdmin()) {
             reportRepository.deleteById(id);
         } else {
-            throw new IllegalStateException("you are not authorized to update this repport");
+            throw new CustomException("you are not authorized to update this report", HttpStatus.UNAUTHORIZED);
         }
     }
 

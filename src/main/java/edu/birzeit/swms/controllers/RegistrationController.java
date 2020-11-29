@@ -30,7 +30,7 @@ public class RegistrationController {
     }
 
     @GetMapping("/user")
-    @ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
+    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
     public UserDto getUser() {
         return userService.getUser();
     }

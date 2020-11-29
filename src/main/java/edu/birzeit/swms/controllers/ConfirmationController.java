@@ -17,7 +17,7 @@ public class ConfirmationController {
 
     @GetMapping("/confirm")
     public String greeting(@RequestParam String token, Model model) {
-        model.addAttribute("token",token);
+        model.addAttribute("token", token);
         return "confirm";
     }
 

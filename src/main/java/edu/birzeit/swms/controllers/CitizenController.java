@@ -6,6 +6,7 @@ import io.swagger.annotations.*;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,32 +27,37 @@ public class CitizenController {
     CitizenService citizenService;
 
     @GetMapping
-    @ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
+    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public List<CitizenDto> getCitizens() {
         return citizenService.getCitizens();
     }
 
     @GetMapping("/{id}")
-    @ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
+    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public CitizenDto getCitizen(@PathVariable int id) {
         return citizenService.getCitizen(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
+    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public CitizenDto addCitizen(@Validated @RequestBody CitizenDto citizenDto) {
         return citizenService.addCitizen(citizenDto);
     }
 
     @PutMapping("/{id}")
-    @ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
+    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public CitizenDto updateCitizen(@Validated @RequestBody CitizenDto citizenDto, @PathVariable int id) {
         return citizenService.updateCitizen(citizenDto, id);
     }
 
     @DeleteMapping("/{id}")
-    @ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
+    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public void deleteCitizen(@PathVariable int id) {
         citizenService.deleteCitizen(id);
     }

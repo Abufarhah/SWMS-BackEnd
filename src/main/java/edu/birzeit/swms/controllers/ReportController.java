@@ -6,6 +6,7 @@ import io.swagger.annotations.*;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,32 +26,37 @@ public class ReportController {
     ReportService reportService;
 
     @GetMapping
-    @ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
+    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CITIZEN')")
     public List<ReportDto> getReports() {
         return reportService.getReports();
     }
 
     @GetMapping("/{id}")
-    @ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
+    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ReportDto getReport(@PathVariable int id) {
         return reportService.getReport(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
+    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ReportDto addReport(@RequestBody ReportDto reportDto) {
         return reportService.addReport(reportDto);
     }
 
     @PutMapping("/{id}")
-    @ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
+    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CITIZEN')")
     public ReportDto updateReport(@RequestBody ReportDto reportDto, @PathVariable int id) {
         return reportService.updateReport(reportDto, id);
     }
 
     @DeleteMapping("/{id}")
-    @ApiOperation(value = "", authorizations = { @Authorization(value="jwtToken") })
+    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public void deleteReport(@PathVariable int id) {
         reportService.deleteReport(id);
     }

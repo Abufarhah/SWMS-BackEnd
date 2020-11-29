@@ -8,6 +8,7 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class BinController {
 
     @GetMapping
     @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CITIZEN')")
     public List<BinDto> getBins(
             @ApiParam(value = "Filter the list in terms of status") @Nullable @RequestParam Status status,
             @ApiParam(value = "Get the closest n bins to the passed location", example = "31.9031238") @Nullable @RequestParam Double latitude,
@@ -38,6 +40,7 @@ public class BinController {
 
     @GetMapping("/{id}")
     @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CITIZEN')")
     public BinDto getBin(@PathVariable int id) {
         return binService.getBin(id);
     }
@@ -45,18 +48,21 @@ public class BinController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public BinDto addBin(@RequestBody BinDto binDto) {
         return binService.addBin(binDto);
     }
 
     @PutMapping("/{id}")
     @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public BinDto updateBin(@RequestBody BinDto binDto, @PathVariable int id) {
         return binService.updateBin(binDto, id);
     }
 
     @DeleteMapping("/{id}")
     @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public void deleteBin(@PathVariable int id) {
         binService.deleteBin(id);
     }

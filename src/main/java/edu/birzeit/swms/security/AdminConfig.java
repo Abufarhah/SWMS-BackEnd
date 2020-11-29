@@ -23,7 +23,7 @@ public class AdminConfig {
         user.setLastName(ADMIN_LASTNAME);
         user.setPhone(ADMIN_PHONE);
         user.setAddress(ADMIN_ADDRESS);
-        user.setUsername(ADMIN_USENAME);
+        user.setUsername(ADMIN_USERNAME);
         user.setPassword(passwordEncoder.encode(ADMIN_PASSWORD));
         user.setRole(UserRole.ADMIN);
         user.setEnabled(true);
