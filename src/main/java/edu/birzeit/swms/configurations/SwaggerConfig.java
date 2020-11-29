@@ -33,8 +33,9 @@ public class SwaggerConfig {
                         PathSelectors.regex("/reports.*"),
                         PathSelectors.regex("/vehicles.*"),
                         PathSelectors.regex("/sign-up.*"),
+                        PathSelectors.regex("/confirm.*"),
                         PathSelectors.regex("/user.*"),
-                        PathSelectors.regex("/login")))
+                        PathSelectors.regex("/login.*")))
                 .apis(RequestHandlerSelectors.basePackage("edu.birzeit"))
                 .build()
                 .apiInfo(apiInfo())
