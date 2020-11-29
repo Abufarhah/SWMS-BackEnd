@@ -8,6 +8,7 @@ import edu.birzeit.swms.mappers.CitizenMapper;
 import edu.birzeit.swms.models.Citizen;
 import edu.birzeit.swms.models.Employee;
 import edu.birzeit.swms.repositories.CitizenRepository;
+import edu.birzeit.swms.repositories.ReportRepository;
 import edu.birzeit.swms.services.CitizenService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class CitizenServiceImpl implements CitizenService {
 
     @Autowired
     CitizenRepository citizenRepository;
+
+    @Autowired
+    ReportRepository reportRepository;
 
     @Autowired
     CitizenMapper citizenMapper;
@@ -57,7 +61,8 @@ public class CitizenServiceImpl implements CitizenService {
 
     @Override
     public CitizenDto updateCitizen(CitizenDto citizenDto, int id) {
-        Citizen citizen = citizenRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Citizen", "id", id));
+        Citizen citizen = citizenRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Citizen", "id", id));
         citizen.setFirstName(citizenDto.getFirstName());
         citizen.setLastName(citizenDto.getLastName());
         citizen.setPhone(citizenDto.getPhone());
@@ -71,11 +76,10 @@ public class CitizenServiceImpl implements CitizenService {
 
     @Override
     public void deleteCitizen(int id) {
-        if (citizenRepository.existsById(id)) {
-            citizenRepository.deleteById(id);
-        } else {
-            throw new ResourceNotFoundException("Citizen", "id", id);
-        }
+        Citizen citizen = citizenRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Citizen", "id", id));
+        citizen.getReportList().forEach(report -> reportRepository.deleteById(report.getId()));
+        citizenRepository.deleteById(id);
     }
 
 }

@@ -8,6 +8,7 @@ import edu.birzeit.swms.mappers.AreaMapper;
 import edu.birzeit.swms.mappers.EmployeeMapper;
 import edu.birzeit.swms.models.Employee;
 import edu.birzeit.swms.repositories.EmployeeRepository;
+import edu.birzeit.swms.repositories.ReportRepository;
 import edu.birzeit.swms.services.EmployeeService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
     EmployeeRepository employeeRepository;
+
+    @Autowired
+    ReportRepository reportRepository;
 
     @Autowired
     EmployeeMapper employeeMapper;
@@ -51,7 +55,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public EmployeeDto addEmployee(EmployeeDto employeeDto) {
         Employee employee = employeeMapper.dtoToEmployee(employeeDto);
         employee.setRole(UserRole.EMPLOYEE);
-        employee.setPassword(passwordEncoder.encode("swms"+employee.getUsername()));
+        employee.setPassword(passwordEncoder.encode("swms" + employee.getUsername()));
         employee.setEnabled(true);
         Employee savedEmployee = employeeRepository.save(employee);
         EmployeeDto savedEmployeeDto = employeeMapper.employeeToDto(savedEmployee);
@@ -74,11 +78,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void deleteEmployee(int id) {
-        if (employeeRepository.existsById(id)) {
-            employeeRepository.deleteById(id);
-        } else {
-            throw new ResourceNotFoundException("Employee", "id", id);
-        }
+        Employee employee = employeeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee", "id", id));
+        employee.getReportList().forEach(report -> reportRepository.deleteById(report.getId()));
+        reportRepository.deleteById(id);
     }
 
     @Override

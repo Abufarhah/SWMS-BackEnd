@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,5 +16,7 @@ public class VehicleDto {
     private int id;
     @ApiModelProperty(required = true)
     private String number;
+    @ApiModelProperty(required = true)
+    private List<Integer> employees;
 
 }

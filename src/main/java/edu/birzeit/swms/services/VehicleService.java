@@ -16,4 +16,8 @@ public interface VehicleService {
 
     void deleteVehicle(int id);
 
+    void assignEmployee(int vehicleId, int employeeId);
+
+    void unAssignEmployee(int vehicleId, int employeeId);
+
 }

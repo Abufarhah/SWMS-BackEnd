@@ -61,4 +61,18 @@ public class VehicleController {
         vehicleService.deleteVehicle(id);
     }
 
+    @GetMapping("{vehicleId}/assign-employee/{employeeId}")
+    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public void assignEmployee(@PathVariable int vehicleId, @PathVariable int employeeId) {
+        vehicleService.assignEmployee(vehicleId, employeeId);
+    }
+
+    @GetMapping("{vehicleId}/unassign-employee/{employeeId}")
+    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public void unAssignEmployee(@PathVariable int vehicleId, @PathVariable int employeeId) {
+        vehicleService.unAssignEmployee(vehicleId, employeeId);
+    }
+
 }
