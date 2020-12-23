@@ -28,14 +28,14 @@ public class AreaController {
     AreaService areaService;
 
     @GetMapping
-    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
+    @ApiOperation(value = "This API used to get all areas", authorizations = {@Authorization(value = "jwtToken")})
     @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
     public List<AreaDto> getAreas() {
         return areaService.getAreas();
     }
 
     @GetMapping("/{id}")
-    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
+    @ApiOperation(value = "This API used to get specific area based on id", authorizations = {@Authorization(value = "jwtToken")})
     @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
     public AreaDto getArea(@PathVariable int id) {
         return areaService.getArea(id);
@@ -43,63 +43,63 @@ public class AreaController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
+    @ApiOperation(value = "This API used to add new area", authorizations = {@Authorization(value = "jwtToken")})
     @PreAuthorize("hasAnyRole('ADMIN')")
     public AreaDto addArea(@RequestBody AreaDto areaDto) {
         return areaService.addArea(areaDto);
     }
 
     @PutMapping("/{id}")
-    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
+    @ApiOperation(value = "This API used to update area based on id", authorizations = {@Authorization(value = "jwtToken")})
     @PreAuthorize("hasAnyRole('ADMIN')")
     public AreaDto updateArea(@RequestBody AreaDto areaDto, @PathVariable int id) {
         return areaService.updateArea(areaDto, id);
     }
 
     @DeleteMapping("/{id}")
-    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
+    @ApiOperation(value = "This API used to delete area based on id", authorizations = {@Authorization(value = "jwtToken")})
     @PreAuthorize("hasAnyRole('ADMIN')")
     public void deleteArea(@PathVariable int id) {
         areaService.deleteArea(id);
     }
 
     @GetMapping("/{id}/bins")
-    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
+    @ApiOperation(value = "This API used to get all bins of specific area base on id", authorizations = {@Authorization(value = "jwtToken")})
     @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
     public List<BinDto> getBinsOfArea(@PathVariable int id) {
         return areaService.getBinsOfArea(id);
     }
 
     @GetMapping("{areaId}/assign-bin/{binId}")
-    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
+    @ApiOperation(value = "This API used to assign a bin to an area", authorizations = {@Authorization(value = "jwtToken")})
     @PreAuthorize("hasAnyRole('ADMIN')")
     public void assignBin(@PathVariable int areaId, @PathVariable int binId) {
         areaService.assignBin(areaId, binId);
     }
 
     @GetMapping("{areaId}/unassign-bin/{binId}")
-    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
+    @ApiOperation(value = "This API used to unassign a bin from an area", authorizations = {@Authorization(value = "jwtToken")})
     @PreAuthorize("hasAnyRole('ADMIN')")
     public void unAssignBin(@PathVariable int areaId, @PathVariable int binId) {
         areaService.unAssignBin(areaId, binId);
     }
 
     @GetMapping("{areaId}/assign-employee/{employeeId}")
-    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
+    @ApiOperation(value = "This API used to assign an employee to an area", authorizations = {@Authorization(value = "jwtToken")})
     @PreAuthorize("hasAnyRole('ADMIN')")
     public void assignEmployee(@PathVariable int areaId, @PathVariable int employeeId) {
         areaService.assignEmployee(areaId, employeeId);
     }
 
     @GetMapping("{areaId}/unassign-employee/{employeeId}")
-    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
+    @ApiOperation(value = "This API used to unassign an employee from an area", authorizations = {@Authorization(value = "jwtToken")})
     @PreAuthorize("hasAnyRole('ADMIN')")
     public void unAssignEmployee(@PathVariable int areaId, @PathVariable int employeeId) {
         areaService.unAssignEmployee(areaId, employeeId);
     }
 
     @GetMapping("/{id}/employees")
-    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
+    @ApiOperation(value = "This API used to get all employees from specific area based on id", authorizations = {@Authorization(value = "jwtToken")})
     @PreAuthorize("hasAnyRole('ADMIN')")
     public List<EmployeeDto> getEmployeesOfArea(@PathVariable int id) {
         return areaService.getEmployeesOfArea(id);

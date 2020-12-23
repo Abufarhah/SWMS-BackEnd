@@ -28,7 +28,7 @@ public class BinController {
     BinService binService;
 
     @GetMapping
-    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
+    @ApiOperation(value = "This API used to get all bins", authorizations = {@Authorization(value = "jwtToken")})
     @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CITIZEN')")
     public List<BinDto> getBins(
             @ApiParam(value = "Filter the list in terms of status") @Nullable @RequestParam Status status,
@@ -39,7 +39,7 @@ public class BinController {
     }
 
     @GetMapping("/{id}")
-    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
+    @ApiOperation(value = "This API a specific bin based on id", authorizations = {@Authorization(value = "jwtToken")})
     @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CITIZEN')")
     public BinDto getBin(@PathVariable int id) {
         return binService.getBin(id);
@@ -47,30 +47,39 @@ public class BinController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
+    @ApiOperation(value = "This API used to add new bin", authorizations = {@Authorization(value = "jwtToken")})
     @PreAuthorize("hasAnyRole('ADMIN')")
     public BinDto addBin(@RequestBody BinDto binDto) {
         return binService.addBin(binDto);
     }
 
     @PutMapping("/{id}")
-    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
+    @ApiOperation(value = "This API used update bin based on id", authorizations = {@Authorization(value = "jwtToken")})
     @PreAuthorize("hasAnyRole('ADMIN')")
     public BinDto updateBin(@RequestBody BinDto binDto, @PathVariable int id) {
         return binService.updateBin(binDto, id);
     }
 
     @DeleteMapping("/{id}")
-    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
+    @ApiOperation(value = "This API used to delete bin based on id", authorizations = {@Authorization(value = "jwtToken")})
     @PreAuthorize("hasAnyRole('ADMIN')")
     public void deleteBin(@PathVariable int id) {
         binService.deleteBin(id);
     }
 
     @PutMapping
-    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
+    @ApiOperation(value = "This API used by bins to update their status",
+            authorizations = {@Authorization(value = "jwtToken")})
     public BinDto updateBinStatus(@RequestParam Status status, int id) {
         return binService.updateBinStatus(status, id);
+    }
+
+    @PostMapping("/{id}")
+    @ApiOperation(value = "This API used by bins to send emergency notification" +
+            "to whom responsible to its area",
+            authorizations = {@Authorization(value = "jwtToken")})
+    public String sendEmergencyNotification(@PathVariable int id) {
+        return binService.sendEmergencyNotification(id);
     }
 
 }

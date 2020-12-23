@@ -1,7 +1,9 @@
 package edu.birzeit.swms.services.implementations;
 
 import edu.birzeit.swms.dtos.BinDto;
+import edu.birzeit.swms.dtos.NotificationRequestDto;
 import edu.birzeit.swms.enums.Status;
+import edu.birzeit.swms.exceptions.CustomException;
 import edu.birzeit.swms.exceptions.ResourceNotFoundException;
 import edu.birzeit.swms.mappers.BinMapper;
 import edu.birzeit.swms.models.Area;
@@ -9,8 +11,10 @@ import edu.birzeit.swms.models.Bin;
 import edu.birzeit.swms.repositories.AreaRepository;
 import edu.birzeit.swms.repositories.BinRepository;
 import edu.birzeit.swms.services.BinService;
+import edu.birzeit.swms.services.NotificationService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
@@ -18,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
+
+import static edu.birzeit.swms.configurations.Constants.*;
 
 @Log
 @Service
@@ -28,6 +34,9 @@ public class BinServiceImpl implements BinService {
 
     @Autowired
     AreaRepository areaRepository;
+
+    @Autowired
+    NotificationService notificationService;
 
     @Autowired
     BinMapper binMapper;
@@ -171,6 +180,26 @@ public class BinServiceImpl implements BinService {
             dist = Math.acos(dist);
             dist = Math.toDegrees(dist);
             return dist;
+        }
+    }
+
+    public String sendEmergencyNotification(int binId) {
+        Bin bin = binRepository.findById(binId).orElseThrow(
+                () -> new ResourceNotFoundException("Bin", "id", binId)
+        );
+        if (bin.getArea() != null) {
+            int areaId = bin.getArea().getId();
+            String topicName = TOPIC_PREFIX +TOPIC_DELIMITER+areaId;
+            String title=EMERGENCY_NOTIFICATION_TITLE;
+            String message=String.format(EMERGENCY_NOTIFICATION_MESSAGE,binId,areaId);
+            NotificationRequestDto notificationRequestDto=new NotificationRequestDto();
+            notificationRequestDto.setTarget(topicName);
+            notificationRequestDto.setTitle(title);
+            notificationRequestDto.setBody(message);
+            return notificationService.sendPnsToTopic(notificationRequestDto);
+        } else {
+            throw new CustomException("Bin: " + binId + "doesn't belong to any area",
+                    HttpStatus.BAD_REQUEST);
         }
     }
 }

@@ -24,4 +24,6 @@ public interface BinService {
 
     List<BinDto> findByLocationAndStatus(Double latitude, Double longitude, Integer n, Status status);
 
+    String sendEmergencyNotification(int binId);
+
 }

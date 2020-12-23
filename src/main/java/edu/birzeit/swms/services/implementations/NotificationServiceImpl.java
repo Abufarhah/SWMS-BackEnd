@@ -1,6 +1,5 @@
 package edu.birzeit.swms.services.implementations;
 
-import com.google.api.client.util.Value;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
@@ -11,7 +10,6 @@ import com.google.firebase.messaging.Notification;
 import edu.birzeit.swms.dtos.NotificationRequestDto;
 import edu.birzeit.swms.dtos.SubscriptionRequestDto;
 import edu.birzeit.swms.services.NotificationService;
-import lombok.extern.java.Log;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;

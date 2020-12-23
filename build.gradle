@@ -30,9 +30,12 @@ dependencies {
     implementation "org.modelmapper:modelmapper:2.3.5"
     compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
-    compile 'io.jsonwebtoken:jjwt-api:0.11.2'
-    runtime 'io.jsonwebtoken:jjwt-impl:0.11.2'
-    runtime 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+    implementation "io.jsonwebtoken:jjwt-api:0.11.0"
+    implementation "io.jsonwebtoken:jjwt-jackson:0.11.0", {exclude group:'io.jsonwebtoken', module:'jjwt-api'}
+    implementation "io.jsonwebtoken:jjwt-impl:0.11.0", {exclude group:'io.jsonwebtoken', module:'jjwt-api'}
+//    compile 'io.jsonwebtoken:jjwt-api:0.11.2'
+//    runtime 'io.jsonwebtoken:jjwt-impl:0.11.2'
+//    runtime 'io.jsonwebtoken:jjwt-jackson:0.11.2'
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
