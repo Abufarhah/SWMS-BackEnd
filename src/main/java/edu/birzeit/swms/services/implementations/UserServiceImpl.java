@@ -103,7 +103,7 @@ public class UserServiceImpl implements UserService {
 
     public void sendConfirmationSMS(String userMail, String token) {
         final SMS sms = new SMS();
-        sms.setTo(userMail);
+        sms.setTo("0097"+userMail);
         sms.setMessage("Thank you for registering in SWMS. Please click on the below link to activate your account." + "http://swms.ga/api/v1/confirm?token="
                 + token);
         smsService.send(sms);
@@ -144,7 +144,7 @@ public class UserServiceImpl implements UserService {
 
     public void sendPasswordSettingSMS(String userMail, String token) {
         final SMS sms = new SMS();
-        sms.setTo(userMail);
+        sms.setTo("0097"+userMail);
         sms.setMessage("Thank you for registering in SWMS. Please click on the below link to set your password." + "http://swms.ga/api/v1/set-password?token="
                 + token);
         smsService.send(sms);
