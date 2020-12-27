@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
                     log.error(String.format("loadUserByUsername --- user with username: '%s' not found", username));
                     return new UsernameNotFoundException(String.format("User with username: '%s' not found", username));
                 });
-                log.debug(String.format("loadUserByUsername --- user was found: '%s'", user));
+                log.debug(String.format("loadUserByUsername --- user was found: '%s'", user.getUsername()));
                 return user;
             }
         } catch (UsernameNotFoundException ex) {

@@ -36,7 +36,7 @@ public class ConfirmationController {
     }
 
     @PostMapping("/sign-up/set-password")
-    public String setEmployeePassword(@RequestParam String token, @RequestBody String password) {
+    public String setEmployeePassword(@RequestParam String token, @RequestParam String password) {
         userService.setPassword(token,password);
         return "success";
     }
