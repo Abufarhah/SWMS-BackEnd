@@ -1,7 +1,6 @@
 package edu.birzeit.swms.services;
 
 import edu.birzeit.swms.dtos.UserDto;
-import edu.birzeit.swms.models.ConfirmationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,10 +12,14 @@ public interface UserService extends UserDetailsService {
 
     void signUpUser(UserDto userDto);
 
-    void sendConfirmationMail(String userMail, String token);
+    void sendConfirmationSMS(String userMail, String token);
 
     void confirmUser(String token);
 
     UserDto getUser();
+
+    void setPassword(String token, String password);
+
+    void sendPasswordSettingSMS(String userMail, String token);
 
 }

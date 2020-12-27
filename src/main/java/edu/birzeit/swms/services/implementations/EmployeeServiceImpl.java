@@ -6,10 +6,13 @@ import edu.birzeit.swms.enums.UserRole;
 import edu.birzeit.swms.exceptions.ResourceNotFoundException;
 import edu.birzeit.swms.mappers.AreaMapper;
 import edu.birzeit.swms.mappers.EmployeeMapper;
+import edu.birzeit.swms.models.ConfirmationToken;
 import edu.birzeit.swms.models.Employee;
 import edu.birzeit.swms.repositories.EmployeeRepository;
 import edu.birzeit.swms.repositories.ReportRepository;
+import edu.birzeit.swms.services.ConfirmationTokenService;
 import edu.birzeit.swms.services.EmployeeService;
+import edu.birzeit.swms.services.UserService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,6 +32,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     ReportRepository reportRepository;
 
     @Autowired
+    UserService userService;
+
+    @Autowired
     EmployeeMapper employeeMapper;
 
     @Autowired
@@ -36,6 +42,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    ConfirmationTokenService confirmationTokenService;
 
     @Override
     public List<EmployeeDto> getEmployees() {
@@ -59,6 +68,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setEnabled(true);
         Employee savedEmployee = employeeRepository.save(employee);
         EmployeeDto savedEmployeeDto = employeeMapper.employeeToDto(savedEmployee);
+        final ConfirmationToken confirmationToken = new ConfirmationToken(savedEmployee);
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
+        userService.sendPasswordSettingSMS(savedEmployee.getPhone(), confirmationToken.getConfirmationToken());
         return savedEmployeeDto;
     }
 

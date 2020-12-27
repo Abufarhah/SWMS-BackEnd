@@ -21,7 +21,6 @@ import edu.birzeit.swms.utils.SWMSUtil;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -99,20 +98,10 @@ public class UserServiceImpl implements UserService {
         final Citizen createdUser = citizenRepository.save(citizen);
         final ConfirmationToken confirmationToken = new ConfirmationToken(createdUser);
         confirmationTokenService.saveConfirmationToken(confirmationToken);
-//        sendConfirmationMail(createdUser.getEmail(), confirmationToken.getConfirmationToken());
-        sendConfirmationMail(createdUser.getPhone(), confirmationToken.getConfirmationToken());
+        sendConfirmationSMS(createdUser.getPhone(), confirmationToken.getConfirmationToken());
     }
 
-    public void sendConfirmationMail(String userMail, String token) {
-//        final SimpleMailMessage mailMessage = new SimpleMailMessage();
-//        mailMessage.setTo(userMail);
-//        mailMessage.setSubject("Mail Confirmation Link!");
-//        mailMessage.setFrom("layth@assert.ps");
-//        mailMessage.setText(
-//                "Thank you for registering in SWMS. Please click on the below link to activate your account." + "http://swms.ga/api/v1/sign-up/confirm?token="
-//                        + token);
-//
-//        emailSenderService.sendEmail(mailMessage);
+    public void sendConfirmationSMS(String userMail, String token) {
         final SMS sms = new SMS();
         sms.setTo(userMail);
         sms.setMessage("Thank you for registering in SWMS. Please click on the below link to activate your account." + "http://swms.ga/api/v1/confirm?token="
@@ -137,6 +126,28 @@ public class UserServiceImpl implements UserService {
     public UserDto getUser() {
         UserDto userDto = userMapper.userToDto(util.getLoggedInUser());
         return userDto;
+    }
+
+    public void setPassword(String token,String password){
+        ConfirmationToken confirmationToken = confirmationTokenRepository.findAllByConfirmationToken(token).orElseThrow(() ->
+                new CustomException("token not valid",HttpStatus.UNAUTHORIZED)
+        );
+        try {
+            final User user = confirmationToken.getUser();
+            user.setPassword(passwordEncoder.encode(password));
+            userRepository.save(user);
+            confirmationTokenService.deleteConfirmationToken(confirmationToken.getId());
+        } catch (Exception e) {
+            throw new CustomException("Error while accessing user information", HttpStatus.SERVICE_UNAVAILABLE);
+        }
+    }
+
+    public void sendPasswordSettingSMS(String userMail, String token) {
+        final SMS sms = new SMS();
+        sms.setTo(userMail);
+        sms.setMessage("Thank you for registering in SWMS. Please click on the below link to set your password." + "http://swms.ga/api/v1/set-password?token="
+                + token);
+        smsService.send(sms);
     }
 
 }
