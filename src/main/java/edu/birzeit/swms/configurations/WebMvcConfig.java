@@ -14,7 +14,7 @@ public class WebMvcConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         final CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(ImmutableList.of("*"));
-        configuration.setAllowedMethods(ImmutableList.of("GET","POST","PUT","DELETE"));
+        configuration.setAllowedMethods(ImmutableList.of("GET","POST","PUT","DELETE","OPTIONS"));
         configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(ImmutableList.of("Authorization","Cache-Control","Content-Type","Access-Control-Allow-Origin"));
 

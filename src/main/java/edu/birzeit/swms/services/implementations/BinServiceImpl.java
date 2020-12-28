@@ -6,12 +6,12 @@ import edu.birzeit.swms.enums.Status;
 import edu.birzeit.swms.exceptions.CustomException;
 import edu.birzeit.swms.exceptions.ResourceNotFoundException;
 import edu.birzeit.swms.mappers.BinMapper;
-import edu.birzeit.swms.models.Area;
-import edu.birzeit.swms.models.Bin;
+import edu.birzeit.swms.models.*;
 import edu.birzeit.swms.repositories.AreaRepository;
 import edu.birzeit.swms.repositories.BinRepository;
 import edu.birzeit.swms.services.BinService;
 import edu.birzeit.swms.services.NotificationService;
+import edu.birzeit.swms.utils.SWMSUtil;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,6 +40,9 @@ public class BinServiceImpl implements BinService {
 
     @Autowired
     BinMapper binMapper;
+
+    @Autowired
+    SWMSUtil util;
 
     @Override
     public List<BinDto> getBins() {
@@ -138,33 +141,45 @@ public class BinServiceImpl implements BinService {
 
     public List<BinDto> findByLocationAndStatus(Double latitude, Double longitude, Integer n, Status status) {
         List<BinDto> binDtoList = new ArrayList<>();
-        if (status == null && latitude == null & longitude == null && n == null) {
+        User user = util.getLoggedInUser();
+        if (user instanceof Admin) {
             binRepository.findAll().forEach(
                     bin -> binDtoList.add(binMapper.binToDto(bin)));
-        } else if (status != null && latitude == null & longitude == null && n == null) {
-            binRepository.findByStatus(status).forEach(
-                    bin -> binDtoList.add(binMapper.binToDto(bin)));
             return binDtoList;
-        } else if (status == null) {
-            PriorityQueue<Bin> priorityQueue = new PriorityQueue<>(
-                    Comparator.comparingDouble(o -> getDistance(o, latitude, longitude)));
-            binRepository.findAll().forEach(bin -> priorityQueue.add(bin));
-            int count = n;
-            while (count != 0 && priorityQueue.size() != 0) {
-                binDtoList.add(binMapper.binToDto(priorityQueue.remove()));
-                count--;
-            }
+        } else if (user instanceof Employee) {
+            ((Employee) user).getAreaList().forEach(area ->
+                    binRepository.findByArea(area).forEach(bin ->
+                            binDtoList.add(binMapper.binToDto(bin))));
+            return binDtoList;
         } else {
-            PriorityQueue<Bin> priorityQueue = new PriorityQueue<>(
-                    Comparator.comparingDouble(o -> getDistance(o, latitude, longitude)));
-            binRepository.findAll().forEach(bin -> priorityQueue.add(bin));
-            int count = n;
-            while (count != 0 && priorityQueue.size() != 0) {
-                binDtoList.add(binMapper.binToDto(priorityQueue.remove()));
-                count--;
+            if (status == null && latitude == null & longitude == null && n == null) {
+                binRepository.findAll().forEach(
+                        bin -> binDtoList.add(binMapper.binToDto(bin)));
+            } else if (status != null && latitude == null & longitude == null && n == null) {
+                binRepository.findByStatus(status).forEach(
+                        bin -> binDtoList.add(binMapper.binToDto(bin)));
+                return binDtoList;
+            } else if (status == null) {
+                PriorityQueue<Bin> priorityQueue = new PriorityQueue<>(
+                        Comparator.comparingDouble(o -> getDistance(o, latitude, longitude)));
+                binRepository.findAll().forEach(bin -> priorityQueue.add(bin));
+                int count = n;
+                while (count != 0 && priorityQueue.size() != 0) {
+                    binDtoList.add(binMapper.binToDto(priorityQueue.remove()));
+                    count--;
+                }
+            } else {
+                PriorityQueue<Bin> priorityQueue = new PriorityQueue<>(
+                        Comparator.comparingDouble(o -> getDistance(o, latitude, longitude)));
+                binRepository.findAll().forEach(bin -> priorityQueue.add(bin));
+                int count = n;
+                while (count != 0 && priorityQueue.size() != 0) {
+                    binDtoList.add(binMapper.binToDto(priorityQueue.remove()));
+                    count--;
+                }
             }
+            return binDtoList;
         }
-        return binDtoList;
     }
 
     private double getDistance(Bin bin, double latitude, double longitude) {
@@ -189,10 +204,10 @@ public class BinServiceImpl implements BinService {
         );
         if (bin.getArea() != null) {
             int areaId = bin.getArea().getId();
-            String topicName = TOPIC_PREFIX +TOPIC_DELIMITER+areaId;
-            String title=EMERGENCY_NOTIFICATION_TITLE;
-            String message=String.format(EMERGENCY_NOTIFICATION_MESSAGE,binId,areaId);
-            NotificationRequestDto notificationRequestDto=new NotificationRequestDto();
+            String topicName = TOPIC_PREFIX + TOPIC_DELIMITER + areaId;
+            String title = EMERGENCY_NOTIFICATION_TITLE;
+            String message = String.format(EMERGENCY_NOTIFICATION_MESSAGE, binId, areaId);
+            NotificationRequestDto notificationRequestDto = new NotificationRequestDto();
             notificationRequestDto.setTarget(topicName);
             notificationRequestDto.setTitle(title);
             notificationRequestDto.setBody(message);
