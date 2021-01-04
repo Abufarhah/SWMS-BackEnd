@@ -14,6 +14,7 @@ import javax.validation.constraints.Pattern;
 @NoArgsConstructor
 public class UserDto {
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @ApiModelProperty(notes = "The database generates citizen ID")
     private int id;
     @ApiModelProperty(required = true)

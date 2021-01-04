@@ -1,5 +1,6 @@
 package edu.birzeit.swms.dtos;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.birzeit.swms.enums.Status;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,7 @@ import javax.persistence.Enumerated;
 @NoArgsConstructor
 public class BinDto {
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @ApiModelProperty(notes = "The database generates bin ID")
     private int id;
     @ApiModelProperty(notes = "defines the location of the bin",required = true)

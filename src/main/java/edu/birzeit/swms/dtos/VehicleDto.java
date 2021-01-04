@@ -1,5 +1,6 @@
 package edu.birzeit.swms.dtos;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class VehicleDto {
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @ApiModelProperty(notes = "The database generates vehicle ID")
     private int id;
     @ApiModelProperty(required = true)

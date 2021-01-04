@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Log
 @Service
@@ -49,14 +50,22 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<EmployeeDto> getEmployees() {
         List<EmployeeDto> employeeDtoList = new ArrayList<>();
-        employeeRepository.findAll().forEach(employee -> employeeDtoList.add(employeeMapper.employeeToDto(employee)));
+        employeeRepository.findAll().forEach(employee -> {
+            EmployeeDto employeeDto=employeeMapper.employeeToDto(employee);
+            employeeDto.setAreaList(employee.getAreaList().stream().map(
+                    area -> area.getId()).collect(Collectors.toList()));
+            employeeDtoList.add(employeeDto);
+        });
         return employeeDtoList;
     }
 
     @Override
     public EmployeeDto getEmployee(int id) {
-        Employee employee = employeeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee", "id", id));
+        Employee employee = employeeRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Employee", "id", id));
         EmployeeDto employeeDto = employeeMapper.employeeToDto(employee);
+        employeeDto.setAreaList(employee.getAreaList().stream().map(
+                area -> area.getId()).collect(Collectors.toList()));
         return employeeDto;
     }
 
@@ -76,7 +85,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDto updateEmployee(EmployeeDto employeeDto, int id) {
-        Employee employee = employeeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee", "id", id));
+        Employee employee = employeeRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Employee", "id", id));
         employee.setFirstName(employeeDto.getFirstName());
         employee.setLastName(employeeDto.getLastName());
         employee.setPhone(employeeDto.getPhone());
@@ -90,14 +100,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void deleteEmployee(int id) {
-        Employee employee = employeeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee", "id", id));
+        Employee employee = employeeRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Employee", "id", id));
         employee.getReportList().forEach(report -> reportRepository.deleteById(report.getId()));
         reportRepository.deleteById(id);
     }
 
     @Override
     public List<AreaDto> getAreasOfEmployee(int id) {
-        Employee employee = employeeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee", "id", id));
+        Employee employee = employeeRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Employee", "id", id));
         List<AreaDto> areaDtoList = new ArrayList<>();
         employee.getAreaList().forEach(area -> areaDtoList.add(areaMapper.areaToDto(area)));
         return areaDtoList;
