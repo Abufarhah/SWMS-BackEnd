@@ -34,7 +34,7 @@ public class ReportController {
 
     @GetMapping("/{id}")
     @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CITIZEN')")
     public ReportDto getReport(@PathVariable int id) {
         return reportService.getReport(id);
     }
@@ -42,7 +42,7 @@ public class ReportController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CITIZEN')")
     public ReportDto addReport(@RequestBody ReportDto reportDto) {
         return reportService.addReport(reportDto);
     }
@@ -56,7 +56,7 @@ public class ReportController {
 
     @DeleteMapping("/{id}")
     @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CITIZEN')")
     public void deleteReport(@PathVariable int id) {
         reportService.deleteReport(id);
     }
