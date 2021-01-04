@@ -52,7 +52,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         List<EmployeeDto> employeeDtoList = new ArrayList<>();
         employeeRepository.findAll().forEach(employee -> {
             EmployeeDto employeeDto=employeeMapper.employeeToDto(employee);
-            employeeDto.setAreaList(employee.getAreaList().stream().map(
+            employeeDto.setAreaIdsList(employee.getAreaList().stream().map(
                     area -> area.getId()).collect(Collectors.toList()));
             employeeDtoList.add(employeeDto);
         });
@@ -64,7 +64,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = employeeRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException("Employee", "id", id));
         EmployeeDto employeeDto = employeeMapper.employeeToDto(employee);
-        employeeDto.setAreaList(employee.getAreaList().stream().map(
+        employeeDto.setAreaIdsList(employee.getAreaList().stream().map(
                 area -> area.getId()).collect(Collectors.toList()));
         return employeeDto;
     }

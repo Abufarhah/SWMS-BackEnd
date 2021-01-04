@@ -29,6 +29,6 @@ public class EmployeeDto {
     @ApiModelProperty(required = true)
     private String username;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private List<Integer> areaList;
+    private List<Integer> areaIdsList;
 
 }
