@@ -103,7 +103,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = employeeRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException("Employee", "id", id));
         employee.getReportList().forEach(report -> reportRepository.deleteById(report.getId()));
-        reportRepository.deleteById(id);
+        employeeRepository.deleteById(id);
     }
 
     @Override

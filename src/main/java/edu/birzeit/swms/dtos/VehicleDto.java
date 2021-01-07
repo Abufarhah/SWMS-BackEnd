@@ -18,6 +18,7 @@ public class VehicleDto {
     private int id;
     @ApiModelProperty(required = true)
     private String number;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @ApiModelProperty(required = true)
     private List<Integer> employees;
 

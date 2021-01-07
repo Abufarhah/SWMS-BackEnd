@@ -59,13 +59,8 @@ public class VehicleServiceImpl implements VehicleService {
     @Override
     public VehicleDto addVehicle(VehicleDto vehicleDto) {
         Vehicle vehicle = vehicleMapper.dtoToVehicle(vehicleDto);
-        employeeRepository.findAllById(vehicleDto.getEmployees()).forEach(employee ->
-                vehicle.getEmployeeList().add(employee));
         Vehicle savedVehicle = vehicleRepository.save(vehicle);
         VehicleDto savedVehicleDto = vehicleMapper.vehicleToDto(savedVehicle);
-        List<Integer> employees = vehicle.getEmployeeList().stream().map(employee ->
-                employee.getId()).collect(Collectors.toList());
-        savedVehicleDto.setEmployees(employees);
         return savedVehicleDto;
     }
 

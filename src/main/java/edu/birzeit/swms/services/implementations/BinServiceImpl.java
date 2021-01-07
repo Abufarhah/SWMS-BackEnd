@@ -2,10 +2,12 @@ package edu.birzeit.swms.services.implementations;
 
 import edu.birzeit.swms.dtos.BinDto;
 import edu.birzeit.swms.dtos.NotificationRequestDto;
+import edu.birzeit.swms.dtos.ReportDto;
 import edu.birzeit.swms.enums.Status;
 import edu.birzeit.swms.exceptions.CustomException;
 import edu.birzeit.swms.exceptions.ResourceNotFoundException;
 import edu.birzeit.swms.mappers.BinMapper;
+import edu.birzeit.swms.mappers.ReportMapper;
 import edu.birzeit.swms.models.*;
 import edu.birzeit.swms.repositories.AreaRepository;
 import edu.birzeit.swms.repositories.BinRepository;
@@ -40,6 +42,9 @@ public class BinServiceImpl implements BinService {
 
     @Autowired
     BinMapper binMapper;
+
+    @Autowired
+    ReportMapper reportMapper;
 
     @Autowired
     SWMSUtil util;
@@ -139,6 +144,15 @@ public class BinServiceImpl implements BinService {
         return savedBinDto;
     }
 
+    @Override
+    public List<ReportDto> getReports(int binId) {
+        Bin bin = binRepository.findById(binId).orElseThrow(
+                () -> new ResourceNotFoundException("Bin", "id", binId));
+        List<ReportDto> reportDtoList=new ArrayList<>();
+        bin.getReportList().forEach(report -> reportDtoList.add(reportMapper.reportToDto(report)));
+        return reportDtoList;
+    }
+
     public List<BinDto> findByLocationAndStatus(Double latitude, Double longitude, Integer n, Status status) {
         List<BinDto> binDtoList = new ArrayList<>();
         User user = util.getLoggedInUser();
@@ -203,17 +217,26 @@ public class BinServiceImpl implements BinService {
                 () -> new ResourceNotFoundException("Bin", "id", binId)
         );
         if (bin.getArea() != null) {
-            int areaId = bin.getArea().getId();
-            String topicName = TOPIC_PREFIX + TOPIC_DELIMITER + areaId;
-            String title = EMERGENCY_NOTIFICATION_TITLE;
-            String message = String.format(EMERGENCY_NOTIFICATION_MESSAGE, binId, areaId);
-            NotificationRequestDto notificationRequestDto = new NotificationRequestDto();
-            notificationRequestDto.setTarget(topicName);
-            notificationRequestDto.setTitle(title);
-            notificationRequestDto.setBody(message);
-            return notificationService.sendPnsToTopic(notificationRequestDto);
+            if(bin.getArea().getEmployeeList()!=null&&bin.getArea().getEmployeeList().size()>0) {
+                int areaId=bin.getArea().getId();
+                bin.getArea().getEmployeeList().forEach(employee -> {
+                    int employeeId=employee.getId();
+                    String topicName = TOPIC_PREFIX + TOPIC_DELIMITER + employeeId;
+                    String title = EMERGENCY_NOTIFICATION_TITLE;
+                    String message = String.format(EMERGENCY_NOTIFICATION_MESSAGE, binId, areaId);
+                    NotificationRequestDto notificationRequestDto = new NotificationRequestDto();
+                    notificationRequestDto.setTarget(topicName);
+                    notificationRequestDto.setTitle(title);
+                    notificationRequestDto.setBody(message);
+                    notificationService.sendPnsToTopic(notificationRequestDto);
+                });
+                return "success";
+            }else{
+                throw new CustomException("Bin: " + binId + " belongs to Area: " + bin.getArea().getId() + " which doesn't have any employee",
+                        HttpStatus.BAD_REQUEST);
+            }
         } else {
-            throw new CustomException("Bin: " + binId + "doesn't belong to any area",
+            throw new CustomException("Bin: " + binId + " doesn't belong to any area",
                     HttpStatus.BAD_REQUEST);
         }
     }

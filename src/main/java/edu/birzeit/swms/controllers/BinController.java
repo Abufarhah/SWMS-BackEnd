@@ -1,6 +1,7 @@
 package edu.birzeit.swms.controllers;
 
 import edu.birzeit.swms.dtos.BinDto;
+import edu.birzeit.swms.dtos.ReportDto;
 import edu.birzeit.swms.enums.Status;
 import edu.birzeit.swms.services.BinService;
 import io.swagger.annotations.*;
@@ -67,12 +68,20 @@ public class BinController {
         binService.deleteBin(id);
     }
 
+    @GetMapping("/{id}/reports")
+    @ApiOperation(value = "This API used to get all reports of a specific bin", authorizations = {@Authorization(value = "jwtToken")})
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    public List<ReportDto> getBinReports(@PathVariable int id) {
+        return binService.getReports(id);
+    }
+
     @PutMapping
     @ApiOperation(value = "This API used by bins to update their status",
             authorizations = {@Authorization(value = "jwtToken")})
     public BinDto updateBinStatus(@RequestParam Status status, int id) {
         return binService.updateBinStatus(status, id);
     }
+
 
     @PostMapping("/{id}")
     @ApiOperation(value = "This API used by bins to send emergency notification" +

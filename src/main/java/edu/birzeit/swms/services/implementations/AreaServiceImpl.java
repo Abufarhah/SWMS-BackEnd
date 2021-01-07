@@ -63,9 +63,17 @@ public class AreaServiceImpl implements AreaService {
     @Override
     public AreaDto addArea(AreaDto areaDto) {
         Area area = areaMapper.dtoToArea(areaDto);
+        List<Bin> binList = (List<Bin>) binRepository.findAll();
+        List<Bin> targetBinList = new ArrayList<>();
+        binList.forEach(bin -> {
+            if (bin.getArea() == null && area.getPolygon().contains(bin.getLocation().getX(), bin.getLocation().getY())) {
+                targetBinList.add(bin);
+            }
+        });
+        area.setBinList(targetBinList);
         Area savedArea = areaRepository.save(area);
-        AreaDto savAreaDto = areaMapper.areaToDto(savedArea);
-        return savAreaDto;
+        AreaDto savedAreaDto = areaMapper.areaToDto(savedArea);
+        return savedAreaDto;
     }
 
     @Override
@@ -74,7 +82,7 @@ public class AreaServiceImpl implements AreaService {
         area.setName(areaDto.getName());
         Polygon polygon = new Polygon();
         areaDto.getPolygonDto().getPointDtoList().forEach(point ->
-                polygon.addPoint((int) (point.getX()*Math.pow(10,7)), (int) (point.getY()*Math.pow(10,7))));
+                polygon.addPoint((int) (point.getX() * Math.pow(10, 7)), (int) (point.getY() * Math.pow(10, 7))));
         area.setPolygon(polygon);
         Area savedArea = areaRepository.save(area);
         AreaDto savedAreaDto = areaMapper.areaToDto(savedArea);
