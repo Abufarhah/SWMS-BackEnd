@@ -21,8 +21,8 @@ public class EmployeeDto {
     private String firstName;
     @ApiModelProperty(required = true)
     private String lastName;
-    @ApiModelProperty(example = "0599123456",required = true)
-    @Pattern(regexp="(^$|^05[0-9]{8})")
+    @ApiModelProperty(example = "0599123456", required = true)
+    @Pattern(regexp = "(^$|^05[0-9]{8})")
     private String phone;
     @ApiModelProperty(required = true)
     private String address;
@@ -30,5 +30,7 @@ public class EmployeeDto {
     private String username;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private List<Integer> areaIdsList;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private int vehicleId;
 
 }

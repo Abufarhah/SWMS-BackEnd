@@ -148,7 +148,7 @@ public class BinServiceImpl implements BinService {
     public List<ReportDto> getReports(int binId) {
         Bin bin = binRepository.findById(binId).orElseThrow(
                 () -> new ResourceNotFoundException("Bin", "id", binId));
-        List<ReportDto> reportDtoList=new ArrayList<>();
+        List<ReportDto> reportDtoList = new ArrayList<>();
         bin.getReportList().forEach(report -> reportDtoList.add(reportMapper.reportToDto(report)));
         return reportDtoList;
     }
@@ -217,10 +217,10 @@ public class BinServiceImpl implements BinService {
                 () -> new ResourceNotFoundException("Bin", "id", binId)
         );
         if (bin.getArea() != null) {
-            if(bin.getArea().getEmployeeList()!=null&&bin.getArea().getEmployeeList().size()>0) {
-                int areaId=bin.getArea().getId();
+            if (bin.getArea().getEmployeeList() != null && bin.getArea().getEmployeeList().size() > 0) {
+                int areaId = bin.getArea().getId();
                 bin.getArea().getEmployeeList().forEach(employee -> {
-                    int employeeId=employee.getId();
+                    int employeeId = employee.getId();
                     String topicName = TOPIC_PREFIX + TOPIC_DELIMITER + employeeId;
                     String title = EMERGENCY_NOTIFICATION_TITLE;
                     String message = String.format(EMERGENCY_NOTIFICATION_MESSAGE, binId, areaId);
@@ -231,7 +231,7 @@ public class BinServiceImpl implements BinService {
                     notificationService.sendPnsToTopic(notificationRequestDto);
                 });
                 return "success";
-            }else{
+            } else {
                 throw new CustomException("Bin: " + binId + " belongs to Area: " + bin.getArea().getId() + " which doesn't have any employee",
                         HttpStatus.BAD_REQUEST);
             }

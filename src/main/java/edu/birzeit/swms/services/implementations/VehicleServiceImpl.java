@@ -96,8 +96,8 @@ public class VehicleServiceImpl implements VehicleService {
         if (vehicle.getEmployeeList().contains(employee)) {
             throw new ResourceAssignedException("Vehicle", vehicleId, "Employee", employeeId);
         } else {
-            vehicle.getEmployeeList().add(employee);
-            vehicleRepository.save(vehicle);
+            employee.setVehicle(vehicle);
+            employeeRepository.save(employee);
         }
     }
 
@@ -108,8 +108,8 @@ public class VehicleServiceImpl implements VehicleService {
         Employee employee = employeeRepository.findById(employeeId).orElseThrow((() ->
                 new ResourceNotFoundException("Employee", "id", employeeId)));
         if (vehicle.getEmployeeList().contains(employee)) {
-            vehicle.getEmployeeList().remove(employee);
-            vehicleRepository.save(vehicle);
+            employee.setVehicle(null);
+            employeeRepository.save(employee);
         } else {
             throw new ResourceNotAssignedException("Vehicle", vehicleId, "Employee", employeeId);
         }

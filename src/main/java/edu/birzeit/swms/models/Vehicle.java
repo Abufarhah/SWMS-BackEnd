@@ -26,7 +26,7 @@ public class Vehicle {
     private String number;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "vehicle")
+    @OneToMany(cascade = CascadeType.PERSIST,mappedBy = "vehicle")
     private List<Employee> employeeList;
 
     @CreatedBy

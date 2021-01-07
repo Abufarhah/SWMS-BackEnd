@@ -8,8 +8,7 @@ import edu.birzeit.swms.mappers.AreaMapper;
 import edu.birzeit.swms.mappers.EmployeeMapper;
 import edu.birzeit.swms.models.ConfirmationToken;
 import edu.birzeit.swms.models.Employee;
-import edu.birzeit.swms.repositories.EmployeeRepository;
-import edu.birzeit.swms.repositories.ReportRepository;
+import edu.birzeit.swms.repositories.*;
 import edu.birzeit.swms.services.ConfirmationTokenService;
 import edu.birzeit.swms.services.EmployeeService;
 import edu.birzeit.swms.services.UserService;
@@ -33,6 +32,15 @@ public class EmployeeServiceImpl implements EmployeeService {
     ReportRepository reportRepository;
 
     @Autowired
+    AreaRepository areaRepository;
+
+    @Autowired
+    VehicleRepository vehicleRepository;
+
+    @Autowired
+    ConfirmationTokenRepository confirmationTokenRepository;
+
+    @Autowired
     UserService userService;
 
     @Autowired
@@ -51,9 +59,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<EmployeeDto> getEmployees() {
         List<EmployeeDto> employeeDtoList = new ArrayList<>();
         employeeRepository.findAll().forEach(employee -> {
-            EmployeeDto employeeDto=employeeMapper.employeeToDto(employee);
+            EmployeeDto employeeDto = employeeMapper.employeeToDto(employee);
             employeeDto.setAreaIdsList(employee.getAreaList().stream().map(
                     area -> area.getId()).collect(Collectors.toList()));
+            if (employee.getVehicle() != null) {
+                employeeDto.setVehicleId(employee.getVehicle().getId());
+            }
             employeeDtoList.add(employeeDto);
         });
         return employeeDtoList;
@@ -66,6 +77,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         EmployeeDto employeeDto = employeeMapper.employeeToDto(employee);
         employeeDto.setAreaIdsList(employee.getAreaList().stream().map(
                 area -> area.getId()).collect(Collectors.toList()));
+        if (employee.getVehicle() != null) {
+            employeeDto.setVehicleId(employee.getVehicle().getId());
+        }
         return employeeDto;
     }
 
@@ -103,6 +117,18 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = employeeRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException("Employee", "id", id));
         employee.getReportList().forEach(report -> reportRepository.deleteById(report.getId()));
+        if (employee.getConfirmationToken() != null) {
+            confirmationTokenRepository.deleteById(employee.getConfirmationToken().getId());
+        }
+        if (employee.getAreaList() != null) {
+            employee.getAreaList().forEach(area -> {
+                area.getEmployeeList().remove(employee);
+                areaRepository.save(area);
+            });
+        }
+        if (employee.getVehicle() != null) {
+            vehicleRepository.deleteById(employee.getVehicle().getId());
+        }
         employeeRepository.deleteById(id);
     }
 
