@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,6 +21,8 @@ public class ReportDto {
     @ApiModelProperty(required = true)
     private String body;
     private String imageUrl;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private LocalDateTime created;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @ApiModelProperty(required = true)
     private int userId;
