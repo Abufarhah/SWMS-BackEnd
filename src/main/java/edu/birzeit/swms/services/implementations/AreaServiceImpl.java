@@ -64,13 +64,12 @@ public class AreaServiceImpl implements AreaService {
     public AreaDto addArea(AreaDto areaDto) {
         Area area = areaMapper.dtoToArea(areaDto);
         List<Bin> binList = (List<Bin>) binRepository.findAll();
-        List<Bin> targetBinList = new ArrayList<>();
         binList.forEach(bin -> {
             if (bin.getArea() == null && area.getPolygon().contains(bin.getLocation().getX(), bin.getLocation().getY())) {
-                targetBinList.add(bin);
+                bin.setArea(area);
+                binRepository.save(bin);
             }
         });
-        area.setBinList(targetBinList);
         Area savedArea = areaRepository.save(area);
         AreaDto savedAreaDto = areaMapper.areaToDto(savedArea);
         return savedAreaDto;
