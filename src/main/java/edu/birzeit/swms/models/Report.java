@@ -25,6 +25,7 @@ public class Report {
     private String subject;
     @Column(length = 1024)
     private String body;
+    private String imageUrl;
 
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumn(name = "bin_id")

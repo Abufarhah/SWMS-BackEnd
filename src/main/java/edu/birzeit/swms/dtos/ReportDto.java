@@ -18,6 +18,7 @@ public class ReportDto {
     private String subject;
     @ApiModelProperty(required = true)
     private String body;
+    private String imageUrl;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @ApiModelProperty(required = true)
     private int userId;
