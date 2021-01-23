@@ -65,7 +65,7 @@ public class ReportController {
     @PutMapping
     @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
     @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CITIZEN')")
-    public ReportDto updateBinStatus(@RequestParam ReportStatus status, int id) {
+    public ReportDto updateReportStatus(@RequestParam ReportStatus status, int id) {
         return reportService.updateReportStatus(status, id);
     }
 
