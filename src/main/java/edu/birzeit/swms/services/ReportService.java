@@ -1,6 +1,7 @@
 package edu.birzeit.swms.services;
 
 import edu.birzeit.swms.dtos.ReportDto;
+import edu.birzeit.swms.enums.ReportStatus;
 
 import java.util.List;
 
@@ -15,5 +16,7 @@ public interface ReportService {
     ReportDto updateReport(ReportDto reportDto, int id);
 
     void deleteReport(int id);
+
+    ReportDto updateReportStatus(ReportStatus status, int id);
 
 }

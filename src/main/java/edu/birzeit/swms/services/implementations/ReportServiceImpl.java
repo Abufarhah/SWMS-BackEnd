@@ -1,6 +1,7 @@
 package edu.birzeit.swms.services.implementations;
 
 import edu.birzeit.swms.dtos.ReportDto;
+import edu.birzeit.swms.enums.ReportStatus;
 import edu.birzeit.swms.exceptions.CustomException;
 import edu.birzeit.swms.exceptions.ResourceNotFoundException;
 import edu.birzeit.swms.mappers.ReportMapper;
@@ -75,6 +76,7 @@ public class ReportServiceImpl implements ReportService {
     public ReportDto addReport(ReportDto reportDto) {
         Report report = reportMapper.dtoToReport(reportDto);
         if (reportDto.getBinId() != 0) {
+            report.setStatus(ReportStatus.SENT);
             report.setBin(binRepository.findById(reportDto.getBinId()).orElseThrow(
                     () -> new ResourceNotFoundException("Bin", "id", reportDto.getBinId())));
         }
@@ -115,6 +117,16 @@ public class ReportServiceImpl implements ReportService {
         } else {
             throw new CustomException("you are not authorized to update this report", HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    @Override
+    public ReportDto updateReportStatus(ReportStatus status, int id) {
+        Report report = reportRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Report", "id", id));
+        report.setStatus(status);
+        Report savedReport = reportRepository.save(report);
+        ReportDto savedReportDto = reportMapper.reportToDto(savedReport);
+        return savedReportDto;
     }
 
 }

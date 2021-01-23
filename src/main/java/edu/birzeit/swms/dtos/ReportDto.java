@@ -1,6 +1,7 @@
 package edu.birzeit.swms.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import edu.birzeit.swms.enums.ReportStatus;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,6 +22,8 @@ public class ReportDto {
     @ApiModelProperty(required = true)
     private String body;
     private String imageUrl;
+    @ApiModelProperty(required = true)
+    private ReportStatus status;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime created;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)

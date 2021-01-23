@@ -1,5 +1,6 @@
 package edu.birzeit.swms.models;
 
+import edu.birzeit.swms.enums.ReportStatus;
 import lombok.*;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -25,6 +26,7 @@ public class Report {
     private String subject;
     @Column(length = 1024)
     private String body;
+    private ReportStatus status;
     private String imageUrl;
 
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)

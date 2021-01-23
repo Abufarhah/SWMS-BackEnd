@@ -1,6 +1,7 @@
 package edu.birzeit.swms.controllers;
 
 import edu.birzeit.swms.dtos.ReportDto;
+import edu.birzeit.swms.enums.ReportStatus;
 import edu.birzeit.swms.services.ReportService;
 import io.swagger.annotations.*;
 import lombok.extern.java.Log;
@@ -34,7 +35,7 @@ public class ReportController {
 
     @GetMapping("/{id}")
     @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CITIZEN')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ReportDto getReport(@PathVariable int id) {
         return reportService.getReport(id);
     }
@@ -59,6 +60,13 @@ public class ReportController {
     @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CITIZEN')")
     public void deleteReport(@PathVariable int id) {
         reportService.deleteReport(id);
+    }
+
+    @PutMapping
+    @ApiOperation(value = "", authorizations = {@Authorization(value = "jwtToken")})
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CITIZEN')")
+    public ReportDto updateBinStatus(@RequestParam ReportStatus status, int id) {
+        return reportService.updateReportStatus(status, id);
     }
 
 }
