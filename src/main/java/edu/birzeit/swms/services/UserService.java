@@ -20,6 +20,6 @@ public interface UserService extends UserDetailsService {
 
     void setPassword(String token, String password);
 
-    void sendPasswordSettingSMS(String userMail, String token);
+    void sendPasswordSettingSMS(String username, String userMail, String token);
 
 }

@@ -93,7 +93,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         EmployeeDto savedEmployeeDto = employeeMapper.employeeToDto(savedEmployee);
         final ConfirmationToken confirmationToken = new ConfirmationToken(savedEmployee);
         confirmationTokenService.saveConfirmationToken(confirmationToken);
-        userService.sendPasswordSettingSMS(savedEmployee.getPhone(), confirmationToken.getConfirmationToken());
+        userService.sendPasswordSettingSMS(savedEmployee.getUsername(),savedEmployee.getPhone(), confirmationToken.getConfirmationToken());
         return savedEmployeeDto;
     }
 
