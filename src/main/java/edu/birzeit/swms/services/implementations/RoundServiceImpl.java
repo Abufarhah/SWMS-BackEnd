@@ -15,9 +15,11 @@ import edu.birzeit.swms.services.RoundService;
 import edu.birzeit.swms.utils.SWMSUtil;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.auditing.CurrentDateTimeProvider;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -69,6 +71,7 @@ public class RoundServiceImpl implements RoundService {
     public RoundDto addRound(RoundDto roundDto) {
         Round round = roundMapper.dtoToRound(roundDto);
         round.setRoundStatus(RoundStatus.IN_PROGRESS);
+        round.setStartTime(LocalDateTime.now());
         User user = util.getLoggedInUser();
         round.setEmployee(user);
         List<Bin> binList = new ArrayList<>();
@@ -89,6 +92,9 @@ public class RoundServiceImpl implements RoundService {
             binRepository.findAllById(roundDto.getBinIdsList()).forEach(bin -> binList.add(bin));
             round.setBinList(binList);
             round.setRoundStatus(roundDto.getRoundStatus());
+            if(roundDto.getRoundStatus()==RoundStatus.FINISHED){
+                round.setEndTime(LocalDateTime.now());
+            }
             Round savedRound = roundRepository.save(round);
             RoundDto savedRoundDto = roundMapper.roundToDto(savedRound);
             return savedRoundDto;
@@ -118,6 +124,9 @@ public class RoundServiceImpl implements RoundService {
         Round round = roundRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Round", "id", id));
         round.setRoundStatus(status);
+        if(status==RoundStatus.FINISHED){
+            round.setEndTime(LocalDateTime.now());
+        }
         Round savedRound = roundRepository.save(round);
         RoundDto savedRoundDto = roundMapper.roundToDto(savedRound);
         return savedRoundDto;

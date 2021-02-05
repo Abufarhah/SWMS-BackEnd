@@ -20,11 +20,15 @@ public class RoundDto {
     private int id;
     @ApiModelProperty(required = true)
     private RoundStatus roundStatus;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @ApiModelProperty(required = true)
     private LocalDateTime startTime;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @ApiModelProperty(required = true)
     private LocalDateTime endTime;
     @ApiModelProperty(required = true)
     private List<Integer> binIdsList;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Integer userId;
 
 }

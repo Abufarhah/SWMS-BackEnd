@@ -76,14 +76,16 @@ public class ReportServiceImpl implements ReportService {
     public ReportDto addReport(ReportDto reportDto) {
         Report report = reportMapper.dtoToReport(reportDto);
         if (reportDto.getBinId() != 0) {
-            report.setStatus(ReportStatus.SENT);
             report.setBin(binRepository.findById(reportDto.getBinId()).orElseThrow(
                     () -> new ResourceNotFoundException("Bin", "id", reportDto.getBinId())));
         }
         User user = util.getLoggedInUser();
         report.setFrom(user);
+        report.setStatus(ReportStatus.SENT);
         Report savedReport = reportRepository.save(report);
         ReportDto savedReportDto = reportMapper.reportToDto(savedReport);
+        savedReportDto.setBinId(savedReport.getBin().getId());
+        savedReportDto.setUserId(savedReport.getFrom().getId());
         return savedReportDto;
     }
 
@@ -101,6 +103,8 @@ public class ReportServiceImpl implements ReportService {
             }
             Report savedReport = reportRepository.save(report);
             ReportDto savedReportDto = reportMapper.reportToDto(savedReport);
+            savedReportDto.setBinId(savedReport.getBin().getId());
+            savedReportDto.setUserId(savedReport.getFrom().getId());
             return savedReportDto;
         } else {
             throw new CustomException("you are not authorized to update this report", HttpStatus.UNAUTHORIZED);
