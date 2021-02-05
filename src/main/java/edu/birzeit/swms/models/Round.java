@@ -1,6 +1,6 @@
 package edu.birzeit.swms.models;
 
-import edu.birzeit.swms.enums.Status;
+import edu.birzeit.swms.enums.RoundStatus;
 import lombok.*;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -9,7 +9,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -20,29 +19,21 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class Bin {
+public class Round {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private Point location;
-    @Enumerated(EnumType.STRING)
-    private Status status;
+    private RoundStatus roundStatus;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
+
+    @ManyToMany(mappedBy = "roundList")
+    private List<Bin> binList;
 
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    @JoinColumn(name = "area_id")
-    private Area area;
-
-    @ToString.Exclude
-    @OneToMany(mappedBy = "bin")
-    private List<Report> reportList;
-
-    @ToString.Exclude
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "bin_round",
-            joinColumns = @JoinColumn(name = "bin_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "round_id", referencedColumnName = "id"))
-    private List<Round> roundList;
+    @JoinColumn(name = "employee_id")
+    private User employee;
 
     @CreatedBy
     @Column(nullable = false, updatable = false)
@@ -59,5 +50,4 @@ public class Bin {
     @LastModifiedDate
     @Column(nullable = false)
     private LocalDateTime modified;
-
 }

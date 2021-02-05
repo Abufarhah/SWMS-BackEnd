@@ -32,6 +32,7 @@ public class SwaggerConfig {
                         PathSelectors.regex("/employees.*"),
                         PathSelectors.regex("/reports.*"),
                         PathSelectors.regex("/vehicles.*"),
+                        PathSelectors.regex("/rounds.*"),
                         PathSelectors.regex("/notifications.*"),
                         PathSelectors.regex("/sign-up.*"),
                         PathSelectors.regex("/confirm.*"),

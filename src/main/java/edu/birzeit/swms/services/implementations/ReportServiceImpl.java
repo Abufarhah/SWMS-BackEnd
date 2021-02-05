@@ -126,6 +126,8 @@ public class ReportServiceImpl implements ReportService {
         report.setStatus(status);
         Report savedReport = reportRepository.save(report);
         ReportDto savedReportDto = reportMapper.reportToDto(savedReport);
+        savedReportDto.setBinId(savedReport.getBin().getId());
+        savedReportDto.setUserId(savedReport.getFrom().getId());
         return savedReportDto;
     }
 

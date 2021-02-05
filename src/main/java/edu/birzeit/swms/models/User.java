@@ -44,6 +44,10 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "from")
     private List<Report> reportList;
 
+    @ToString.Exclude
+    @OneToMany(mappedBy = "employee")
+    private List<Round> roundList;
+
     @OneToOne(mappedBy = "user")
     ConfirmationToken confirmationToken;
 
