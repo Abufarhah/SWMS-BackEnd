@@ -24,11 +24,12 @@ public class Round {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Enumerated(EnumType.STRING)
     private RoundStatus roundStatus;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
-    @ManyToMany(mappedBy = "roundList")
+    @ManyToMany(mappedBy = "roundList",cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private List<Bin> binList;
 
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)

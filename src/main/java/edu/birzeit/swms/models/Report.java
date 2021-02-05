@@ -26,6 +26,7 @@ public class Report {
     private String subject;
     @Column(length = 1024)
     private String body;
+    @Enumerated(EnumType.STRING)
     private ReportStatus status;
     private String imageUrl;
 
