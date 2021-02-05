@@ -2,6 +2,7 @@
 import RPi.GPIO as GPIO
 import time
 import requests
+import json
  
 #GPIO Mode (BOARD / BCM)
 GPIO.setmode(GPIO.BCM)
@@ -45,13 +46,14 @@ if __name__ == '__main__':
     try:
         print ("started")
         headers = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJST0xFX0FETUlOIn1dLCJpYXQiOjE2MDU1NTk0NjIsImV4cCI6MTYxNDExNzYwMH0.bKZoR5-4qVmQ0V5nyTLxGxdXjHLP6CCfvvAntB8EvO0'}
-        mybin = {"location": {
-                             "x": 31.968146,
-                             "y": 35.193396
-                           },
-                           "status": "UNDER_THRESHOLD"}
-        response = requests.post("http://swms.ga/api/v1/bins",data=mybin,headers=headers)
-        id = response.id
+        bin = {"location": {
+                                "x": 31.968146,
+                                "y": 35.193396
+                                   },
+                                   "status": "UNDER_THRESHOLD"}
+        response = requests.post("http://swms.ga/api/v1/bins",json=bin,headers=headers)
+        retrievedBin = json.loads(response.text)
+        id = retrievedBin['id']
         distMax = distance()
         statusBefore = "UNDER_THRESHOUD"
         lastTime = 0
