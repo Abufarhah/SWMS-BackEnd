@@ -28,7 +28,10 @@ public class Round {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
-    @ManyToMany(mappedBy = "roundList",cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "bin_round",
+            joinColumns = @JoinColumn(name = "bin_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "round_id", referencedColumnName = "id"))
     private List<Bin> binList;
 
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)

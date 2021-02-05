@@ -38,10 +38,7 @@ public class Bin {
     private List<Report> reportList;
 
     @ToString.Exclude
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "bin_round",
-            joinColumns = @JoinColumn(name = "bin_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "round_id", referencedColumnName = "id"))
+    @ManyToMany(mappedBy = "binList",cascade = CascadeType.REMOVE)
     private List<Round> roundList;
 
     @CreatedBy
