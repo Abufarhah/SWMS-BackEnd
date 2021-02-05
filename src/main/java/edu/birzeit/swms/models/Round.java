@@ -24,7 +24,6 @@ public class Round {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Enumerated(EnumType.STRING)
     private RoundStatus roundStatus;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
